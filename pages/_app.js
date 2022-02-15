@@ -22,6 +22,9 @@ const darkTheme = createTheme({
     },
     background: {
       paper: '#000'
+    },
+    neutral: {
+      main: '#536471'
     }
   }
 })
