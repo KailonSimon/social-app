@@ -25,7 +25,7 @@ export default function BottomNav() {
                     label="My Feed" 
                     icon={
                         <Badge color='primary' variant='dot'>
-                            <Home />
+                            <Home sx={{ color: 'white' }} />
                         </Badge>
                     } 
                     showLabel={false} 
@@ -37,7 +37,7 @@ export default function BottomNav() {
                         query: { name: 'test' },
                     }}
                     label="Search" 
-                    icon={<Search />} 
+                    icon={<Search sx={{ color: 'white' }} />} 
                     showLabel={false} 
                 />
                 <BottomNavigationAction 
@@ -49,7 +49,7 @@ export default function BottomNav() {
                     label="Notifications" 
                     icon={
                         <Badge badgeContent={5} max={99} color="primary">
-                            <Notifications />
+                            <Notifications sx={{ color: 'white' }} />
                         </Badge>
                     } 
                     showLabel={false} 
@@ -61,7 +61,7 @@ export default function BottomNav() {
                         query: { name: 'test' },
                     }}
                     label="Messages" 
-                    icon={<Mail />} 
+                    icon={<Mail sx={{ color: 'white' }} />} 
                     showLabel={false} 
                 />
             </BottomNavigation>
