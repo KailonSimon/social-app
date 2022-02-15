@@ -1,80 +1,102 @@
 const posts = [
     {
-        id: 1,
+        postId: 1,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "10h"
+        date: "10h",
+        favorites: 103,
+        reposts: 25
     },
     {   
-        id: 2,
+        postId: 2,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "22m"
+        date: "22m",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 3,
+        postId: 3,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "11h"
+        date: "11h",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 4,
+        postId: 4,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "4h"
+        date: "4h",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 5,
+        postId: 5,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "18m"
+        date: "18m",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 6,
+        postId: 6,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "3m"
+        date: "3m",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 7,
+        postId: 7,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "38m"
+        date: "38m",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 8,
+        postId: 8,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "5m"
+        date: "5m",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 9,
+        postId: 9,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "1h"
+        date: "1h",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 10,
+        postId: 10,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "7h"
+        date: "7h",
+        favorites: 103,
+        reposts: 25
     },
     {
-        id: 11,
+        postId: 11,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
-        date: "24m"
+        date: "24m",
+        favorites: 103,
+        reposts: 25
     },
 ]
 
