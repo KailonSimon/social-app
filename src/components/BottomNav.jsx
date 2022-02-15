@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material';
+import { Paper, BottomNavigation, BottomNavigationAction, Badge } from '@mui/material';
 import { Home, Mail, Notifications, Search } from '@mui/icons-material';
 import { NextLinkComposed } from './Link';
 
@@ -7,13 +7,14 @@ export default function BottomNav() {
     const [value, setValue] = useState(0);
   
     return (
-        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, }} elevation={3}>
             <BottomNavigation
                 showLabels
                 value={value}
                 onChange={(event, newValue) => {
                 setValue(newValue);
                 }}
+                sx={{ borderTop: '1px solid #424242' }}
             >
                 <BottomNavigationAction 
                     component={NextLinkComposed} 
@@ -22,7 +23,11 @@ export default function BottomNav() {
                         query: { name: 'test' },
                     }}
                     label="My Feed" 
-                    icon={<Home />} 
+                    icon={
+                        <Badge color='primary' variant='dot'>
+                            <Home />
+                        </Badge>
+                    } 
                     showLabel={false} 
                 />
                 <BottomNavigationAction 
@@ -42,7 +47,11 @@ export default function BottomNav() {
                         query: { name: 'test' },
                     }}
                     label="Notifications" 
-                    icon={<Notifications />} 
+                    icon={
+                        <Badge badgeContent={5} max={99} color="primary">
+                            <Notifications />
+                        </Badge>
+                    } 
                     showLabel={false} 
                 />
                 <BottomNavigationAction 

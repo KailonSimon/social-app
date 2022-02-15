@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider, ListItemIcon, ListItemText } from '@mui/material';
-import { Favorite, Logout, PermIdentity, Settings } from '@mui/icons-material';
+import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
@@ -26,14 +26,44 @@ const Navbar = () => {
 
     setIsDrawerOpen(!isDrawerOpen);
   };
+
+
   const drawer = (
     <Box
-      sx={{ minWidth: 280, fontSize: '15px' }}
+      sx={{ minWidth: 280, height: '100%', fontSize: '15px', backgroundColor: 'background.paper' }}
       role="presentation"
       onClick={(event) => toggleDrawer(event)}
       onKeyDown={(event) => toggleDrawer(event)}
     >
-      <List subheader={<ListSubheader>Account info</ListSubheader>} disablePadding>
+      <List 
+        subheader={
+          <ListSubheader sx={{ mt: '16px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant='body1' color="text.primary" fontWeight='bold'>Account info</Typography>
+              <IconButton sx={{ p: 0 }} onClick={() => setIsDrawerOpen(false)} disableRipple disableFocusRipple disableTouchRipple>
+                  <Close />
+              </IconButton>
+            </Box>
+            <Box sx={{ pt: '12px' }}>
+              <Avatar>K</Avatar>
+            </Box>
+            <Box sx={{ py: '12px' }}>
+              <Typography variant='body1' color="text.primary" fontWeight='bold'>Kaileaux</Typography>
+              <Typography variant='body1' color="text.secondary">@kaileaux</Typography>
+            </Box>
+            <Box sx={{ display: 'flex', width: '100%', columnGap: '24px', py: '12px'}}>
+              <Box sx={{ display: 'flex', columnGap: '4px'}}>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>142</Typography>
+                <Typography variant='body1' color="text.secondary">Following</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', columnGap: '4px' }}>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>242</Typography>
+                <Typography variant='body1' color="text.secondary">Followers</Typography>
+              </Box>
+            </Box>
+          </ListSubheader>
+        } disablePadding
+      >
 
         <ListItem sx={{ p: 0 }}>
           <ListItemButton sx={{ minHeight: '52px' }}>
@@ -47,7 +77,7 @@ const Navbar = () => {
         <ListItem sx={{ p: 0 }}>
           <ListItemButton sx={{ minHeight: '52px' }}>
             <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-              <Favorite fontSize='small' />
+              <FavoriteBorder fontSize='small' />
             </ListItemIcon>
             <ListItemText primary="Likes" />
           </ListItemButton>
@@ -59,7 +89,7 @@ const Navbar = () => {
         <ListItem sx={{ p: 0 }}>
           <ListItemButton sx={{ minHeight: '52px' }}>
             <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-              <Settings fontSize='small' />
+              <SettingsOutlined fontSize='small' />
             </ListItemIcon>
             <ListItemText primary="Settings" />
           </ListItemButton>
@@ -78,8 +108,8 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ marginBottom: '16px'}}>
-        <Container maxWidth="xl" sx={{ paddingLeft: '16px'}}>
+      <AppBar position="sticky" sx={{ height: '53px' }}>
+        <Container maxWidth="xl" sx={{ paddingLeft: '16px', backgroundColor: 'background.paper' }}>
           <Toolbar disableGutters>
             <Typography
               variant="h6"
