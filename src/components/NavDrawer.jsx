@@ -26,7 +26,7 @@ export default function NavDrawer() {
     setIsOpen(!isOpen);
   };
 
-  const list = () => (
+  const menuItems = () => (
     <Box
       sx={{ width: 250 }}
       role="presentation"

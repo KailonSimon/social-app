@@ -7,7 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ShareIcon from '@mui/icons-material/Share';
-import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, VolumeOffOutlined } from '@mui/icons-material';
+import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
 
@@ -36,12 +36,12 @@ export default function Post(props) {
         }
         action={
           <IconButton aria-label="settings" sx={{ mt: '-8px' }} onClick={() => setIsMenuOpen(true)}>
-            <MoreHoriz />
+            <MoreHoriz sx={{ color: 'neutral.main' }} />
           </IconButton>
         }
         title={
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px'}}>
-            <Typography variant="body1" component="span">{loading ? <Skeleton width={75}/> : displayName}</Typography>
+            <Typography variant="body1" component="span" fontWeight='bold'>{loading ? <Skeleton width={75}/> : displayName}</Typography>
             <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
             <Typography variant="body1" color="text.secondary" component="span">{!loading && '•'}</Typography>
             <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={30} /> : date}</Typography>
@@ -94,7 +94,7 @@ export default function Post(props) {
           }
         </Box>
         <IconButton aria-label="share" sx={{ p: 0 }}>
-          <ShareIcon fontSize='small'/>
+          <ShareOutlined fontSize='small' sx={{ color: 'neutral.main' }}/>
         </IconButton>
       </CardActions>
     </Card>
@@ -104,11 +104,11 @@ export default function Post(props) {
         onClose={() => console.log('menu open')}
         onOpen={() => console.log('menu closed')}
       >
-        <Box>
-          <ListItem sx={{ p: 0 }}>
+        <Box sx={{ backgroundColor: 'black' }}>
+          <ListItem sx={{ p: 0 }} >
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-                <SentimentDissatisfiedOutlined fontSize='small' />
+                <SentimentDissatisfiedOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
               <ListItemText primary="Not interested in this post" />
             </ListItemButton>
@@ -116,7 +116,7 @@ export default function Post(props) {
           <ListItem sx={{ p: 0 }}>
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-                <PersonRemoveOutlined fontSize='small' />
+                <PersonRemoveOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
               <ListItemText primary={`Unfollow @${username}`} />
             </ListItemButton>
@@ -124,7 +124,7 @@ export default function Post(props) {
           <ListItem sx={{ p: 0 }}>
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-                <VolumeOffOutlined fontSize='small' />
+                <VolumeOffOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
               <ListItemText primary={`Mute @${username}`} />
             </ListItemButton>
@@ -132,7 +132,7 @@ export default function Post(props) {
           <ListItem sx={{ p: 0 }}>
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-                <Block fontSize='small' />
+                <Block fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
               <ListItemText primary={`Block @${username}`} />
             </ListItemButton>
@@ -140,16 +140,15 @@ export default function Post(props) {
           <ListItem sx={{ p: 0 }}>
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-                <FlagOutlined fontSize='small' />
+                <FlagOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
               <ListItemText primary="Report post" />
             </ListItemButton>
           </ListItem>
           <ListItem>
             <Button 
-              variant='outlined' 
-              color='info' 
-              sx={{ width: '100%', borderRadius: '300px' }} 
+              variant='outlined'
+              sx={{ width: '100%', borderRadius: '999px', color: 'white', border: '1px solid #536471', textTransform: 'none', fontWeight: 'bold', minHeight: '44px' }} 
               onClick={() => setIsMenuOpen(false)}
             >
               Cancel

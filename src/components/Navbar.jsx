@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
+import Link from 'next/link';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
@@ -82,10 +83,6 @@ const Navbar = () => {
             <ListItemText primary="Likes" />
           </ListItemButton>
         </ListItem>
-
-      </List>
-      <Divider />
-      <List disablePadding>
         <ListItem sx={{ p: 0 }}>
           <ListItemButton sx={{ minHeight: '52px' }}>
             <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
@@ -94,13 +91,16 @@ const Navbar = () => {
             <ListItemText primary="Settings" />
           </ListItemButton>
         </ListItem>
+        <Divider />
         <ListItem sx={{ p: 0 }}>
-          <ListItemButton sx={{ minHeight: '52px' }}>
-            <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
-              <Logout fontSize='small' />
-            </ListItemIcon>
-            <ListItemText primary="Log out" />
-          </ListItemButton>
+          <Link href='/logout'>
+            <ListItemButton sx={{ minHeight: '52px' }}>
+              <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
+                <Logout fontSize='small' />
+              </ListItemIcon>
+              <ListItemText primary="Log out" />
+            </ListItemButton>
+          </Link>
         </ListItem>
       </List>
     </Box>
@@ -122,7 +122,7 @@ const Navbar = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={toggleDrawer} sx={{ p: 0, mr: '24px' }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" sx={{ width: '32px', height: '32px' }}/>
+                <Avatar alt="Remy Sharp" sx={{ width: '32px', height: '32px' }}/>
               </IconButton>
             </Box>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
