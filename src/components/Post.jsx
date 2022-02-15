@@ -9,21 +9,33 @@ import Typography from '@mui/material/Typography';
 import ShareIcon from '@mui/icons-material/Share';
 import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
-import { Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
+import { Button, Dialog, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
 
 export default function Post(props) {
 
-  const { displayName, username, text, date } = props.post;
+  const { displayName, username, text, date, favorites, reposts } = props.post;
   const [isFavorited, setIsFavorited] = useState(false);
+  const [totalFavorites, setTotalFavorites] = useState(favorites);
   const [isReposted, setIsReposted] = useState(false);
+  const [totalReposts, setTotalReposts] = useState(reposts);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const loading = false;
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const favoriteHandler = () => {
+    setTotalFavorites(isFavorited ? totalFavorites - 1 : totalFavorites + 1);
+    setIsFavorited(!isFavorited);
+  }
+  const repostHandler = () => {
+    setTotalReposts(isReposted ? totalReposts - 1 : totalReposts + 1);
+    setIsReposted(!isReposted);
+  }
+  const loading = false //for future use
   return (
-    <>
+    <Box sx={{ backgroundColor: 'background.paper', height: '100vh'}}>
     <Card sx={{ width: '100%', px: '16px', py: '12px' }} square elevation={0}>
       <CardHeader
-        sx={{ p: 0, alignItems: 'flex-start' }}
+        sx={{ p: 0, alignItems: 'flex-start', mb: '4px' }}
         avatar={
           loading ? 
             <Skeleton variant="circular">
@@ -40,62 +52,77 @@ export default function Post(props) {
           </IconButton>
         }
         title={
-          <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px'}}>
-            <Typography variant="body1" component="span" fontWeight='bold'>{loading ? <Skeleton width={75}/> : displayName}</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', columnGap: '4px'}}>
+            <Typography variant="body1" component="span" fontWeight='bold' sx={{ mb: '-8px' }}>{loading ? <Skeleton width={75}/> : displayName}</Typography>
             <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
-            <Typography variant="body1" color="text.secondary" component="span">{!loading && '•'}</Typography>
-            <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={30} /> : date}</Typography>
           </Box>
         }
       />
-      <CardContent sx={{ paddingLeft: '64px', paddingY: '0'}}>
-        <Typography variant="body1" sx={{ mt: '-24px'}} >
-            {loading ? <Skeleton width={250} height={48} /> : text}
-        </Typography>
+      <CardContent sx={{ p: '0'}}>
+        <Box sx={{ py: '8px'}}>
+            <Typography variant="subtitle1" fontWeight='bold' >
+                {loading ? <Skeleton width={250} height={48} /> : text}
+            </Typography>
+            <Typography variant="body2" color='text.secondary'>
+                12:02 PM • Feb 15, 2022 
+            </Typography>
+        </Box>
+        <Divider />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', p: '16px 4px' }}>
+            <Box sx={{ display: 'flex', columnGap: '4px' }}>
+                <Typography variant="body2" fontWeight='bold' color='text.primary'>
+                    {totalReposts}
+                </Typography>
+                <Typography variant="body2" color='text.secondary'>
+                    Reposts
+                </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', columnGap: '4px' }}>
+                <Typography variant="body2" fontWeight='bold' color='text.primary'>
+                    135
+                </Typography>
+                <Typography variant="body2" color='text.secondary'>
+                    Comments
+                </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', columnGap: '4px' }}>
+                <Typography variant="body2" fontWeight='bold' color='text.primary'>
+                    {totalFavorites}
+                </Typography>
+                <Typography variant="body2" color='text.secondary'>
+                    Favorites
+                </Typography>
+            </Box>
+        </Box>
+        <Divider />
+
       </CardContent>
-      <CardActions disableSpacing sx={{ padding: '0 0 0 64px', height: '32px', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-        <Box>
-          {loading ? 
-            <Skeleton width={25} height={20} /> :
-            <>
-              <IconButton aria-label="comments" sx={{ p: 0 }}>
-                <ChatBubbleOutline fontSize='small' color="disabled" />
-              </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>
-                2
-              </Typography>
-            </>
-          }
+      <CardActions disableSpacing sx={{ p: 0 }} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '100%', py: '4px', height: '48px' }}>
+                <IconButton aria-label="comments">
+                    <ChatBubbleOutline sx={{ color: 'neutral.main' }}/>
+                </IconButton>
+                <IconButton onClick={repostHandler} aria-label="repost">
+                    {isReposted ? 
+                        <Loop color='primary'/>
+                    :
+                        <Loop sx={{ color: 'neutral.main' }}/>
+                    }
+                </IconButton>
+                <IconButton onClick={favoriteHandler} aria-label="add-to-favorites">
+                    {isFavorited ?
+                        <Favorite color='primary'/>
+                    :
+                        <FavoriteBorder sx={{ color: 'neutral.main'}}/>
+                    }
+                </IconButton>
+                <IconButton aria-label="share">
+                    <ShareOutlined sx={{ color: 'neutral.main' }}/>
+                </IconButton>
+            </Box>
+            <Divider />
         </Box>
-        <Box>
-          {loading ? 
-            <Skeleton width={25} height={20} /> :
-            <>
-              <IconButton onClick={() => setIsReposted(!isReposted)} aria-label="repost" sx={{ p: 0 }}>
-                <Loop fontSize='small' color={ isReposted ? 'primary' : 'disabled' }/>
-              </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>5</Typography>
-            </>
-          }
-        </Box>
-        <Box>
-          {loading ? 
-            <Skeleton width={25} height={20} /> :
-            <>
-              <IconButton onClick={() => setIsFavorited(!isFavorited)} aria-label="add to favorites" sx={{ p: 0 }}>
-                {isFavorited ?
-                  <Favorite fontSize='small' color='primary'/>
-                :
-                  <FavoriteBorder fontSize='small' color='disabled'/>
-                }
-              </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>16</Typography>
-            </>
-          }
-        </Box>
-        <IconButton aria-label="share" sx={{ p: 0 }}>
-          <ShareOutlined fontSize='small' sx={{ color: 'neutral.main' }}/>
-        </IconButton>
       </CardActions>
     </Card>
     <SwipeableDrawer
@@ -130,7 +157,7 @@ export default function Post(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => {setIsDialogOpen(true); setIsMenuOpen(false)}} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <Block fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -156,6 +183,19 @@ export default function Post(props) {
           </ListItem>
         </Box>
       </SwipeableDrawer>
-    </>
+      <Dialog
+        open={isDialogOpen}
+        PaperProps={{ style: { borderRadius: '16px' }}}
+      >
+        <Box sx={{ width: '320px', maxWidth: '80vw', p: '28px', backgroundColor: 'background.paper', display: 'flex', flexDirection: 'column'}}>
+            <Typography variant='h6' color='text.primary' fontWeight='bold'>Block @{username}?</Typography>
+            <Typography variant='body1' color='text.secondary'>They will not be able to follow you or view your posts, and you will not see posts or notifications from @{username}.</Typography>
+            <Box sx={{ mt: '24px' }}>
+                <Button onClick={() => setIsDialogOpen(false)} variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'red', color: 'white', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold'}} fullWidth>Block</Button>
+                <Button onClick={() => setIsDialogOpen(false)} variant='outlined' sx={{ minHeight: '44px', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold', color: 'white', border: '1px solid #536471'}} fullWidth>Cancel</Button>
+            </Box>
+        </Box>
+      </Dialog>
+    </Box>
   );
 }

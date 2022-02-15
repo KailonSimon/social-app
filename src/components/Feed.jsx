@@ -1,6 +1,6 @@
 import { Box, Divider, Fab, Paper, Stack } from '@mui/material'
 import React from 'react'
-import Post from './Post'
+import FeedPost from './FeedPost'
 import { posts } from '../../data'
 import { Create } from '@mui/icons-material'
 
@@ -12,7 +12,7 @@ function Feed() {
           divider={<Divider flexItem />}
           >
           {posts.map(post => {
-            return <Post key={post.id} post={post} />
+            return <FeedPost key={post.postId} post={post} />
           })}
       </Stack>
     </Paper>
