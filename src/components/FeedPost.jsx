@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import ShareIcon from '@mui/icons-material/Share';
 import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
-import { Button, CardActionArea, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
+import { Button, CardActionArea, Dialog, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
 import Link from 'next/link';
 
 export default function FeedPost(props) {
@@ -20,6 +20,7 @@ export default function FeedPost(props) {
   const [isReposted, setIsReposted] = useState(false);
   const [totalReposts, setTotalReposts] = useState(reposts);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const favoriteHandler = () => {
     setTotalFavorites(isFavorited ? totalFavorites - 1 : totalFavorites + 1);
@@ -30,13 +31,9 @@ export default function FeedPost(props) {
     setIsReposted(!isReposted);
   }
   const loading = false //for future use
-  useEffect(() => {
-    console.log(postId);
-  }, [])
   return (
     <>
     <Card sx={{ width: '100%', px: '16px', py: '12px' }} square elevation={0}>
-      <CardActionArea href={`/post/${postId}`}>
       <CardHeader
         sx={{ p: 0, alignItems: 'flex-start' }}
         avatar={
@@ -112,17 +109,18 @@ export default function FeedPost(props) {
           <ShareOutlined fontSize='small' sx={{ color: 'neutral.main' }}/>
         </IconButton>
       </CardActions>
-      </CardActionArea>
     </Card>
     <SwipeableDrawer
         anchor='bottom'
         open={isMenuOpen}
         onClose={() => console.log('menu open')}
         onOpen={() => console.log('menu closed')}
+        PaperProps={{ style: { borderTopLeftRadius: '32px', borderTopRightRadius: '32px' }}}
+        BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
           <ListItem sx={{ p: 0 }} >
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <SentimentDissatisfiedOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -130,7 +128,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <PersonRemoveOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -138,7 +136,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <VolumeOffOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -146,7 +144,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => {setIsDialogOpen(true); setIsMenuOpen(false)}} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <Block fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -154,7 +152,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <FlagOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -172,6 +170,19 @@ export default function FeedPost(props) {
           </ListItem>
         </Box>
       </SwipeableDrawer>
+      <Dialog
+        open={isDialogOpen}
+        PaperProps={{ style: { borderRadius: '16px' }}}
+      >
+        <Box sx={{ width: '320px', maxWidth: '80vw', p: '28px', backgroundColor: 'background.paper', display: 'flex', flexDirection: 'column'}}>
+            <Typography variant='h6' color='text.primary' fontWeight='bold'>Block @{username}?</Typography>
+            <Typography variant='body1' color='text.secondary'>They will not be able to follow you or view your posts, and you will not see posts or notifications from @{username}.</Typography>
+            <Box sx={{ mt: '24px' }}>
+                <Button onClick={() => setIsDialogOpen(false)} variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'red', color: 'white', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold'}} fullWidth>Block</Button>
+                <Button onClick={() => setIsDialogOpen(false)} variant='outlined' sx={{ minHeight: '44px', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold', color: 'white', border: '1px solid #536471'}} fullWidth>Cancel</Button>
+            </Box>
+        </Box>
+      </Dialog>
     </>
   );
 }

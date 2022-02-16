@@ -19,7 +19,6 @@ export default function Post(props) {
   const [isReposted, setIsReposted] = useState(false);
   const [totalReposts, setTotalReposts] = useState(reposts);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const favoriteHandler = () => {
@@ -130,10 +129,12 @@ export default function Post(props) {
         open={isMenuOpen}
         onClose={() => console.log('menu open')}
         onOpen={() => console.log('menu closed')}
+        PaperProps={{ style: { borderTopLeftRadius: '32px', borderTopRightRadius: '32px' }}}
+        BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
           <ListItem sx={{ p: 0 }} >
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <SentimentDissatisfiedOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -141,7 +142,7 @@ export default function Post(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <PersonRemoveOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -149,7 +150,7 @@ export default function Post(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <VolumeOffOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
@@ -165,7 +166,7 @@ export default function Post(props) {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <FlagOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>

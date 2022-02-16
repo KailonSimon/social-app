@@ -125,16 +125,6 @@ const Navbar = () => {
                 <Avatar alt="Remy Sharp" sx={{ width: '32px', height: '32px' }}/>
               </IconButton>
             </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page}
-                </Button>
-              ))}
-            </Box>
             <Typography
               variant="body1"
               noWrap
