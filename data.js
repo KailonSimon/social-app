@@ -14,8 +14,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "22m",
-        favorites: 103,
-        reposts: 25
+        favorites: 42,
+        reposts: 6
     },
     {
         postId: 3,
@@ -23,8 +23,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "11h",
-        favorites: 103,
-        reposts: 25
+        favorites: 355,
+        reposts: 5
     },
     {
         postId: 4,
@@ -32,8 +32,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "4h",
-        favorites: 103,
-        reposts: 25
+        favorites: 12,
+        reposts: 98
     },
     {
         postId: 5,
@@ -41,8 +41,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "18m",
-        favorites: 103,
-        reposts: 25
+        favorites: 488,
+        reposts: 23
     },
     {
         postId: 6,
@@ -50,8 +50,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "3m",
-        favorites: 103,
-        reposts: 25
+        favorites: 35,
+        reposts: 2
     },
     {
         postId: 7,
@@ -59,8 +59,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "38m",
-        favorites: 103,
-        reposts: 25
+        favorites: 56,
+        reposts: 34
     },
     {
         postId: 8,
@@ -68,8 +68,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "5m",
-        favorites: 103,
-        reposts: 25
+        favorites: 765,
+        reposts: 255
     },
     {
         postId: 9,
@@ -77,8 +77,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "1h",
-        favorites: 103,
-        reposts: 25
+        favorites: 23,
+        reposts: 4
     },
     {
         postId: 10,
@@ -86,8 +86,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "7h",
-        favorites: 103,
-        reposts: 25
+        favorites: 654,
+        reposts: 23
     },
     {
         postId: 11,
@@ -95,8 +95,8 @@ const posts = [
         username: "username11",
         text: "Post Text",
         date: "24m",
-        favorites: 103,
-        reposts: 25
+        favorites: 66,
+        reposts: 23
     },
 ]
 
