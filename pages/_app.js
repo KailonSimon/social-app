@@ -24,8 +24,38 @@ const darkTheme = createTheme({
       paper: '#000'
     },
     neutral: {
-      main: '#536471'
+      main: 'rgb(110, 118, 125)'
     }
+  },
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    lineHeight: '20px',
+    fontSize: 14,
+    headerH1: {
+      fontWeight: 700,
+      fontSize: '17px'
+    },
+    postH1: {
+      fontWeight: 700,
+    },
+    postH2: {
+      fontWeight: 400,
+      color: 'rgb(110, 118, 125)'
+    },
+    postText: {
+      fontWeight: 400,
+    },
   }
 })
 
