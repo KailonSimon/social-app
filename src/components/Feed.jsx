@@ -9,8 +9,8 @@ import Link from 'next/link'
 
 function Feed() {
   const [posts, setPosts] = useState([])
-  const postQuery = query(collection(db, "posts"));
   useEffect(() => {
+    const postQuery = query(collection(db, "posts"));
     const getPosts = onSnapshot(postQuery, (snapshot) => {
       setPosts(snapshot.docs.map((doc) => {
         const data = doc.data();
