@@ -57,7 +57,7 @@ function ComposePost() {
     <Container disableGutters>
         <Box sx={{ display: 'flex', alignItems: 'center', height: '53px', px: '16px', backgroundColor: 'background.paper' }}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                <Link href='/'>
+                <Link href='/' passHref>
                     <IconButton size="small">
                         <ArrowBack fontSize='small'/>
                     </IconButton>

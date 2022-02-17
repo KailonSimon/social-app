@@ -14,7 +14,7 @@ export default function logout() {
                 <Typography variant='body1' color='text.secondary'>You can always log back in at any time. If you just want to switch accounts, you can do that by adding an existing account.</Typography>
                 <Box sx={{ mt: '24px' }}>
                     <Button variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'white', color: 'black', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold'}} fullWidth>Log out</Button>
-                    <Link href='/'>
+                    <Link href='/' passHref>
                         <Button variant='outlined' sx={{ minHeight: '44px', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold', color: 'white', border: '1px solid #536471'}} fullWidth>Cancel</Button>
                     </Link>
                 </Box>

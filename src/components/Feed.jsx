@@ -10,22 +10,22 @@ import Link from 'next/link'
 function Feed() {
   const [posts, setPosts] = useState([])
   const postQuery = query(collection(db, "posts"));
-  const getPosts = onSnapshot(postQuery, (snapshot) => {
-    setPosts(snapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: doc.id,
-        displayName: data.displayName,
-        username: data.username,
-        text: data.text,
-        favorites: data.favorites,
-        reposts: data.reposts,
-        replies: data.replies,
-        date: data.date,
-      }
-    }));
-  });
   useEffect(() => {
+    const getPosts = onSnapshot(postQuery, (snapshot) => {
+      setPosts(snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          displayName: data.displayName,
+          username: data.username,
+          text: data.text,
+          favorites: data.favorites,
+          reposts: data.reposts,
+          replies: data.replies,
+          date: data.date,
+        }
+      }));
+    });
     getPosts();
   }, [])
 
@@ -47,7 +47,7 @@ function Feed() {
       }
     </Paper>
     <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
-      <Link href='/compose/post'>
+      <Link href='/compose/post' passHref>
         <Fab color='primary' aria-label='create' sx={{ boxShadow: '0 0 5px white'}}>
           <Create  fontSize='large' />
         </Fab>

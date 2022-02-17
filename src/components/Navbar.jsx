@@ -93,7 +93,7 @@ const Navbar = () => {
         </ListItem>
         <Divider />
         <ListItem sx={{ p: 0 }}>
-          <Link href='/logout'>
+          <Link href='/logout' passHref>
             <ListItemButton sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <Logout fontSize='small' />
