@@ -6,7 +6,6 @@ import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import ShareIcon from '@mui/icons-material/Share';
 import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { Button, CardActionArea, Dialog, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
@@ -14,7 +13,7 @@ import Link from 'next/link';
 
 export default function FeedPost(props) {
 
-  const { postId, displayName, username, text, date, favorites, reposts } = props.post;
+  const { id, displayName, username, text, date, favorites, reposts, replies } = props.post;
   const [isFavorited, setIsFavorited] = useState(false);
   const [totalFavorites, setTotalFavorites] = useState(favorites);
   const [isReposted, setIsReposted] = useState(false);
@@ -35,7 +34,7 @@ export default function FeedPost(props) {
     <>
     <Card sx={{ width: '100%', px: '16px', py: '12px' }} square elevation={0}>
       <CardHeader
-        sx={{ p: 0, alignItems: 'flex-start' }}
+        sx={{ p: 0, alignItems: 'flex-start', mb: '-24px' }}
         avatar={
           loading ? 
             <Skeleton variant="circular">
@@ -52,16 +51,16 @@ export default function FeedPost(props) {
           </IconButton>
         }
         title={
-          <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px'}}>
-            <Typography variant="body1" component="span" fontWeight='bold'>{loading ? <Skeleton width={75}/> : displayName}</Typography>
-            <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
-            <Typography variant="body1" color="text.secondary" component="span">{!loading && '•'}</Typography>
-            <Typography variant="body1" color="text.secondary" component="span">{loading ? <Skeleton width={30} /> : date}</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px' }}>
+            <Typography variant="postH1" component="span">{loading ? <Skeleton width={75}/> : displayName}</Typography>
+            <Typography variant="postH2" component="span" sx={{ overflowWrap: "break-word" }}>{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
+            <Typography variant="postH2" component="span">{!loading && '·'}</Typography>
+            <Typography variant="postH2" component="span">{loading ? <Skeleton width={30} /> : "date"}</Typography>
           </Box>
         }
       />
       <CardContent sx={{ paddingLeft: '64px', paddingY: '0'}}>
-        <Typography variant="body1" sx={{ mt: '-24px'}} >
+        <Typography variant="postText" >
             {loading ? <Skeleton width={250} height={48} /> : text}
         </Typography>
       </CardContent>
@@ -70,11 +69,11 @@ export default function FeedPost(props) {
           {loading ? 
             <Skeleton width={25} height={20} /> :
             <>
-              <IconButton aria-label="comments" sx={{ p: 0 }}>
+              <IconButton aria-label="replies" sx={{ p: 0 }}>
                 <ChatBubbleOutline fontSize='small' color="disabled" />
               </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>
-                2
+              <Typography variant='postH2' sx={{ px: '8px'}}>
+                {replies}
               </Typography>
             </>
           }
@@ -86,7 +85,7 @@ export default function FeedPost(props) {
               <IconButton onClick={repostHandler} aria-label="repost" sx={{ p: 0 }}>
                 <Loop fontSize='small' color={ isReposted ? 'primary' : 'disabled' }/>
               </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>{totalReposts}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{totalReposts}</Typography>
             </>
           }
         </Box>
@@ -101,7 +100,7 @@ export default function FeedPost(props) {
                   <FavoriteBorder fontSize='small' color='disabled'/>
                 }
               </IconButton>
-              <Typography variant='caption' color="text.secondary" sx={{ px: '8px'}}>{totalFavorites}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{totalFavorites}</Typography>
             </>
           }
         </Box>
@@ -113,8 +112,8 @@ export default function FeedPost(props) {
     <SwipeableDrawer
         anchor='bottom'
         open={isMenuOpen}
-        onClose={() => console.log('menu open')}
-        onOpen={() => console.log('menu closed')}
+        onClose={() => setIsMenuOpen(false)}
+        onOpen={() => setIsMenuOpen(true)}
         PaperProps={{ style: { borderTopLeftRadius: '32px', borderTopRightRadius: '32px' }}}
         BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
