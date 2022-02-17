@@ -126,7 +126,7 @@ const Navbar = () => {
               </IconButton>
             </Box>
             <Typography
-              variant="body1"
+              variant="headerH1"
               noWrap
               component="div"
               sx={{ flexGrow: 0, fontWeight: 'bold', display: { xs: 'flex', md: 'none' } }}
