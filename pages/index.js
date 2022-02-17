@@ -8,7 +8,7 @@ import styles from '../styles/Home.module.css'
 import Login from '../src/components/Login'
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   return (
     <>
       <Head>

@@ -1,33 +1,33 @@
 const posts = [
     {
-        postId: 1,
-        displayName: "Placeholder",
-        username: "username11",
-        text: "Post Text",
+        id: 1,
+        displayName: "NBA",
+        username: "NBA",
+        text: "Did Harden really put on a fat suit I thought he was just fat fr",
         date: "10h",
         favorites: 103,
         reposts: 25
     },
     {   
-        postId: 2,
-        displayName: "Placeholder",
-        username: "username11",
-        text: "Post Text",
+        id: 2,
+        displayName: "Burger King",
+        username: "BurgerKing",
+        text: "It’s time to level up your burger game. Order Big King and more on the new 2 for $5 menu.",
         date: "22m",
         favorites: 42,
         reposts: 6
     },
     {
-        postId: 3,
-        displayName: "Placeholder",
-        username: "username11",
-        text: "Post Text",
+        id: 3,
+        displayName: "Some nigga",
+        username: "iteeeezy",
+        text: "if you ain’t talkin money then you don’t speak my language",
         date: "11h",
         favorites: 355,
         reposts: 5
     },
     {
-        postId: 4,
+        id: 4,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -36,7 +36,7 @@ const posts = [
         reposts: 98
     },
     {
-        postId: 5,
+        id: 5,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -45,7 +45,7 @@ const posts = [
         reposts: 23
     },
     {
-        postId: 6,
+        id: 6,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -54,7 +54,7 @@ const posts = [
         reposts: 2
     },
     {
-        postId: 7,
+        id: 7,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -63,7 +63,7 @@ const posts = [
         reposts: 34
     },
     {
-        postId: 8,
+        id: 8,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -72,7 +72,7 @@ const posts = [
         reposts: 255
     },
     {
-        postId: 9,
+        id: 9,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -81,7 +81,7 @@ const posts = [
         reposts: 4
     },
     {
-        postId: 10,
+        id: 10,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
@@ -90,7 +90,7 @@ const posts = [
         reposts: 23
     },
     {
-        postId: 11,
+        id: 11,
         displayName: "Placeholder",
         username: "username11",
         text: "Post Text",
