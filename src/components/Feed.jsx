@@ -26,26 +26,19 @@ function Feed() {
         }
       }));
     });
-    getPosts();
-  }, [])
+  }, [posts])
 
   return (
-  <Paper sx={{ minHeight: 'calc(100vh - 56px)', backgroundColor: '#121212' }} square>
-    <Paper sx={{ mb: 7 }} square>
-      {posts ?
-        <Stack
-            divider={<Divider flexItem />}
-            >
-            {posts.map(post => {
-              return <FeedPost key={post.id} post={post} />
-            })}
-        </Stack>
-      :
-      <Paper>
-        <Typography variant="headerH1">Nothing to show...</Typography>
-      </Paper>
-      }
-    </Paper>
+  <Paper sx={{ minHeight: 'calc(100vh - 56px)', backgroundColor: 'background.paper' }} square>
+    {posts &&
+      <Stack
+          divider={<Divider flexItem />}
+          >
+          {posts.map(post => {
+            return <FeedPost key={post.id} post={post} />
+          })}
+      </Stack>
+    }
     <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
       <Link href='/compose/post' passHref>
         <Fab color='primary' aria-label='create' sx={{ boxShadow: '0 0 5px white'}}>
