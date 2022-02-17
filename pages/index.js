@@ -6,6 +6,7 @@ import Navbar from '../src/components/Navbar'
 import NavDrawer from '../src/components/NavDrawer'
 import styles from '../styles/Home.module.css'
 import Login from '../src/components/Login'
+import { Container } from '@mui/material'
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -15,11 +16,11 @@ export default function Home() {
         <title>Home</title>
       </Head>
       {isAuthenticated ? 
-      <>
+      <Container sx={{ backgroundColor: 'background.paper'}} disableGutters>
       <Navbar />
       <Feed />
       <BottomNav />
-      </>
+      </Container>
       :
       <Login />
       } 
