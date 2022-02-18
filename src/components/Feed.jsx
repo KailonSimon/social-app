@@ -16,6 +16,7 @@ function Feed() {
         const data = doc.data();
         return {
           id: doc.id,
+          userID: data.userID,
           displayName: data.displayName,
           username: data.username,
           text: data.text,

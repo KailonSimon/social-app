@@ -6,11 +6,12 @@ import CardActions from '@mui/material/CardActions';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
+import { Block, ChatBubbleOutline, DeleteForeverOutlined, Favorite, FavoriteBorder, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
 import { Box } from '@mui/system';
-import { Button, CardActionArea, Dialog, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
-import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
+import { Button, Dialog, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, SwipeableDrawer } from '@mui/material';
+import { auth } from '../firebase-config';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { deletePost } from '../functions';
 import dayjs from 'dayjs';
 const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
@@ -38,7 +39,8 @@ dayjs.updateLocale('en', {
 
 export default function FeedPost(props) {
 
-  const { displayName, username, text, date, favorites, reposts, replies } = props.post;
+  const { id, displayName, username, text, date, favorites, reposts, replies, userID } = props.post;
+  const [user, loading, error] = useAuthState(auth);
   const [isFavorited, setIsFavorited] = useState(false);
   const [totalFavorites, setTotalFavorites] = useState(favorites);
   const [isReposted, setIsReposted] = useState(false);
@@ -54,7 +56,6 @@ export default function FeedPost(props) {
     setTotalReposts(isReposted ? totalReposts - 1 : totalReposts + 1);
     setIsReposted(!isReposted);
   }
-  const loading = false //for future use
   const timeElapsed = dayjs(date).fromNow();
   return (
     <>
@@ -144,6 +145,18 @@ export default function FeedPost(props) {
         BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
+          {userID == user.uid &&
+          <ListItem sx={{ p: 0 }} >
+            <ListItemButton onClick={() => deletePost(id)} sx={{ minHeight: '52px' }}>
+              <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
+                <DeleteForeverOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
+              </ListItemIcon>
+              <ListItemText primary="Delete post" />
+            </ListItemButton>
+          </ListItem>
+          }
+          {userID != user.uid &&
+          <>
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
@@ -184,12 +197,14 @@ export default function FeedPost(props) {
               <ListItemText primary="Report post" />
             </ListItemButton>
           </ListItem>
+          </>
+          }
           <ListItem>
             <Button 
               variant='outlined'
               sx={{ width: '100%', borderRadius: '999px', color: 'white', border: '1px solid #536471', textTransform: 'none', fontWeight: 'bold', minHeight: '44px' }} 
               onClick={() => setIsMenuOpen(false)}
-            >
+              >
               Cancel
             </Button>
           </ListItem>

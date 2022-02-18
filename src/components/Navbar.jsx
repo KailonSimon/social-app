@@ -10,13 +10,14 @@ import Button from '@mui/material/Button';
 import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { auth } from '../firebase-config';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const user = useSelector(state => state.value);
+  const [user, loading, error] = useAuthState(auth);
   const toggleDrawer = (event) => {
     if (
       event &&
@@ -47,19 +48,19 @@ const Navbar = () => {
               </IconButton>
             </Box>
             <Box sx={{ pt: '12px' }}>
-              <Avatar>K</Avatar>
+              <Avatar src={user.photoURL} />
             </Box>
             <Box sx={{ py: '12px' }}>
-              <Typography variant='body1' color="text.primary" fontWeight='bold'>Kaileaux</Typography>
-              <Typography variant='body1' color="text.secondary">@kaileaux</Typography>
+              <Typography variant='body1' color="text.primary" fontWeight='bold'>{user.displayName}</Typography>
+              <Typography variant='body1' color="text.secondary">{`@${user.email}`}</Typography>
             </Box>
             <Box sx={{ display: 'flex', width: '100%', columnGap: '24px', py: '12px'}}>
               <Box sx={{ display: 'flex', columnGap: '4px'}}>
-                <Typography variant='body1' color="text.primary" fontWeight='bold'>142</Typography>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>0</Typography>
                 <Typography variant='body1' color="text.secondary">Following</Typography>
               </Box>
               <Box sx={{ display: 'flex', columnGap: '4px' }}>
-                <Typography variant='body1' color="text.primary" fontWeight='bold'>242</Typography>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>0</Typography>
                 <Typography variant='body1' color="text.secondary">Followers</Typography>
               </Box>
             </Box>
@@ -123,7 +124,7 @@ const Navbar = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={toggleDrawer} sx={{ p: 0, mr: '24px' }}>
-                <Avatar alt="Remy Sharp" sx={{ width: '32px', height: '32px' }}/>
+                <Avatar alt={user.displayName} src={user.photoURL} sx={{ width: '32px', height: '32px' }}/>
               </IconButton>
             </Box>
             <Typography
