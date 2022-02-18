@@ -10,10 +10,35 @@ import { Block, ChatBubble, ChatBubbleOutline, Favorite, FavoriteBorder, Flag, F
 import { Box } from '@mui/system';
 import { Button, CardActionArea, Dialog, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Paper, Skeleton, SwipeableDrawer } from '@mui/material';
 import Link from 'next/link';
+import { formatDistanceToNow } from 'date-fns';
+import dayjs from 'dayjs';
+const relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
+const updateLocale = require('dayjs/plugin/updateLocale')
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('en', {
+  relativeTime: {
+    future: "in %s",
+    past: "%s",
+    s: '%ds',
+    m: "1m",
+    mm: "%dm",
+    h: "1h",
+    hh: "%dh",
+    d: "1d",
+    dd: "%dd",
+    M: "1mo",
+    MM: "%dmo",
+    y: "1y",
+    yy: "%dy"
+  }
+})
+
 
 export default function FeedPost(props) {
 
-  const { id, displayName, username, text, date, favorites, reposts, replies } = props.post;
+  const { displayName, username, text, date, favorites, reposts, replies } = props.post;
   const [isFavorited, setIsFavorited] = useState(false);
   const [totalFavorites, setTotalFavorites] = useState(favorites);
   const [isReposted, setIsReposted] = useState(false);
@@ -30,6 +55,7 @@ export default function FeedPost(props) {
     setIsReposted(!isReposted);
   }
   const loading = false //for future use
+  const timeElapsed = dayjs(date).fromNow();
   return (
     <>
     <Card sx={{ width: '100%', px: '16px', py: '12px' }} square elevation={0}>
@@ -52,10 +78,10 @@ export default function FeedPost(props) {
         }
         title={
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px' }}>
-            <Typography variant="postH1" component="span">{loading ? <Skeleton width={75}/> : displayName}</Typography>
-            <Typography variant="postH2" component="span" sx={{ overflowWrap: "break-word" }}>{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
+            <Typography variant="postH1" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={75}/> : displayName}</Typography>
+            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
             <Typography variant="postH2" component="span">{!loading && '·'}</Typography>
-            <Typography variant="postH2" component="span">{loading ? <Skeleton width={30} /> : "date"}</Typography>
+            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis', overflowWrap: 'break-word' }}>{timeElapsed}</Typography>
           </Box>
         }
       />

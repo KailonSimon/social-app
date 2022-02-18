@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link'
 import { db } from '../../src/firebase-config'
 import { addDoc, collection } from 'firebase/firestore'
-
+import dayjs from 'dayjs';
 
 function ComposePost() {
 
@@ -13,7 +13,6 @@ function ComposePost() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('Posted successfully!');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const currentDate = new Date();
 
   const handleSnackbarClose = (e, reason) => {
     if (reason === 'clickaway') {
@@ -33,6 +32,7 @@ function ComposePost() {
     return;
   }
   async function createPost(e) {
+    const currentDate = dayjs().toJSON();
     e.preventDefault();
     try {
         const docRef = await addDoc(collection(db, "posts"), {
@@ -45,7 +45,6 @@ function ComposePost() {
             date: currentDate
         }) 
         setPostText('');
-        console.log("Posted successfully");
         handleSnackbarOpen(true);
     } catch (error) {
         console.error(error);
