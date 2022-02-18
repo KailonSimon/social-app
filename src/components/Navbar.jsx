@@ -10,12 +10,13 @@ import Button from '@mui/material/Button';
 import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const user = useSelector(state => state.value);
   const toggleDrawer = (event) => {
     if (
       event &&

@@ -3,19 +3,33 @@ import Head from 'next/head'
 import BottomNav from '../src/components/BottomNav'
 import Feed from '../src/components/Feed'
 import Navbar from '../src/components/Navbar'
-import NavDrawer from '../src/components/NavDrawer'
-import styles from '../styles/Home.module.css'
 import Login from '../src/components/Login'
 import { Container } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { auth } from '../src/firebase-config';
+import { onAuthStateChanged } from '@firebase/auth';
+import { saveUser } from '../src/features/redux/slice/authSlice';
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const user = useSelector((state) => state.auth.value);
+  console.log("user from state", user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(saveUser(user.refreshToken));
+      } else {
+        dispatch(saveUser(undefined));
+      }
+    });
+  }, [auth, dispatch]);
   return (
     <>
       <Head>
         <title>Home</title>
       </Head>
-      {isAuthenticated ? 
+      {user ? 
       <Container sx={{ backgroundColor: 'background.paper'}} disableGutters>
       <Navbar />
       <Feed />
