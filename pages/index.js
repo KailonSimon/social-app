@@ -13,7 +13,6 @@ import { saveUser } from '../src/features/redux/slice/authSlice';
 
 export default function Home() {
   const user = useSelector((state) => state.auth.value);
-  console.log("user from state", user);
   const dispatch = useDispatch();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
