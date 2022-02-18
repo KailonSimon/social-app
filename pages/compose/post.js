@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { db } from '../../src/firebase-config'
 import { addDoc, collection } from 'firebase/firestore'
 import dayjs from 'dayjs';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../src/firebase-config';
 
 function ComposePost() {
 
@@ -13,6 +15,7 @@ function ComposePost() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('Posted successfully!');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [user, loading, error] = useAuthState(auth);
 
   const handleSnackbarClose = (e, reason) => {
     if (reason === 'clickaway') {
@@ -36,13 +39,14 @@ function ComposePost() {
     e.preventDefault();
     try {
         const docRef = await addDoc(collection(db, "posts"), {
-            displayName: "placeholder",
-            username: "username12",
+            displayName: user.displayName.split(' ')[0],
+            username: user.displayName.split(' ').join(''),
             favorites: 0,
             reposts: 0,
             replies: 0,
             text: postText,
-            date: currentDate
+            date: currentDate,
+            userID: user.uid
         }) 
         setPostText('');
         handleSnackbarOpen(true);
