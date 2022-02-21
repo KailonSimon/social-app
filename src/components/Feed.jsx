@@ -6,28 +6,26 @@ import { db } from '../firebase-config'
 import { collection, onSnapshot, query } from 'firebase/firestore'
 //import { posts } from '../../data';
 import Link from 'next/link'
+import { getFeedPosts } from '../functions'
 
 function Feed() {
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
   useEffect(() => {
-    const postQuery = query(collection(db, "posts"));
-    const getPosts = onSnapshot(postQuery, (snapshot) => {
-      setPosts(snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          userID: data.userID,
-          displayName: data.displayName,
-          username: data.username,
-          text: data.text,
-          favorites: data.favorites,
-          reposts: data.reposts,
-          replies: data.replies,
-          date: data.date,
-        }
-      }));
-    });
-  }, [posts])
+    const q = query(collection(db, "posts"))
+    onSnapshot(q, (querySnapshot) => {
+      setPosts(querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              userID: doc.data().userID,
+              displayName: doc.data().displayName,
+              username: doc.data().username,
+              text: doc.data().text,
+              favorites: doc.data().favorites,
+              reposts: doc.data().reposts,
+              replies: doc.data().replies,
+              date: doc.data().date
+      })))
+    })
+  }, []);
 
   return (
   <Paper sx={{ minHeight: 'calc(100vh - 56px)', backgroundColor: 'background.paper' }} square>
@@ -40,7 +38,7 @@ function Feed() {
           })}
       </Stack>
     }
-    <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
+    <Box sx={{ position: 'absolute', bottom: '76px', right: '20px', zIndex: 999 }}>
       <Link href='/compose/post' passHref>
         <Fab color='primary' aria-label='create' sx={{ boxShadow: '0 0 5px white'}}>
           <Create  fontSize='large' />

@@ -41,9 +41,9 @@ function ComposePost() {
         const docRef = await addDoc(collection(db, "posts"), {
             displayName: user.displayName.split(' ')[0],
             username: user.displayName.split(' ').join(''),
-            favorites: 0,
-            reposts: 0,
-            replies: 0,
+            favorites: [],
+            reposts: [],
+            replies: [],
             text: postText,
             date: currentDate,
             userID: user.uid

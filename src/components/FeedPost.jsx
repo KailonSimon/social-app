@@ -11,8 +11,9 @@ import { Box } from '@mui/system';
 import { Button, Dialog, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, SwipeableDrawer } from '@mui/material';
 import { auth } from '../firebase-config';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { deletePost } from '../functions';
+import { deletePost, isPostFavorited, handleFavorite, isPostReposted, handleRepost } from '../functions';
 import dayjs from 'dayjs';
+
 const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
 const updateLocale = require('dayjs/plugin/updateLocale')
@@ -39,21 +40,28 @@ dayjs.updateLocale('en', {
 
 export default function FeedPost(props) {
 
-  const { id, displayName, username, text, date, favorites, reposts, replies, userID } = props.post;
+  const { id, userID, displayName, username, text, favorites, reposts, replies, date } = props.post;
   const [user, loading, error] = useAuthState(auth);
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [totalFavorites, setTotalFavorites] = useState(favorites);
-  const [isReposted, setIsReposted] = useState(false);
-  const [totalReposts, setTotalReposts] = useState(reposts);
+  const [isFavorited, setIsFavorited] = useState(undefined);
+  const [isReposted, setIsReposted] = useState(undefined);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const favoriteHandler = () => {
-    setTotalFavorites(isFavorited ? totalFavorites - 1 : totalFavorites + 1);
+  useEffect(() => {
+    isPostFavorited(id, user.uid).then(r => {
+      setIsFavorited(r);
+    });
+    isPostReposted(id, user.uid).then(r => {
+      setIsReposted(r);
+    })
+  }, [])
+
+  const handleFavoriteClick = () => {
+    handleFavorite(id, user.uid);
     setIsFavorited(!isFavorited);
   }
-  const repostHandler = () => {
-    setTotalReposts(isReposted ? totalReposts - 1 : totalReposts + 1);
+  const handleRepostClick = () => {
+    handleRepost(id, user.uid);
     setIsReposted(!isReposted);
   }
   const timeElapsed = dayjs(date).fromNow();
@@ -109,10 +117,10 @@ export default function FeedPost(props) {
           {loading ? 
             <Skeleton width={25} height={20} /> :
             <>
-              <IconButton onClick={repostHandler} aria-label="repost" sx={{ p: 0 }}>
+              <IconButton onClick={handleRepostClick} aria-label="repost" sx={{ p: 0 }}>
                 <Loop fontSize='small' color={ isReposted ? 'primary' : 'disabled' }/>
               </IconButton>
-              <Typography variant='postH2' sx={{ px: '8px'}}>{totalReposts}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{reposts.length}</Typography>
             </>
           }
         </Box>
@@ -120,14 +128,14 @@ export default function FeedPost(props) {
           {loading ? 
             <Skeleton width={25} height={20} /> :
             <>
-              <IconButton onClick={favoriteHandler} aria-label="add-to-favorites" sx={{ p: 0 }}>
+              <IconButton onClick={handleFavoriteClick} aria-label="add-to-favorites" sx={{ p: 0 }}>
                 {isFavorited ?
                   <Favorite fontSize='small' color='primary'/>
                 :
                   <FavoriteBorder fontSize='small' color='disabled'/>
                 }
               </IconButton>
-              <Typography variant='postH2' sx={{ px: '8px'}}>{totalFavorites}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{favorites.length}</Typography>
             </>
           }
         </Box>
