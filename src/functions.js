@@ -1,7 +1,27 @@
-import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, collection, query, getDocs, where, FieldPath, Firestore, documentId, getDoc, onSnapshot } from "firebase/firestore";
+import dayjs from "dayjs";
+import { doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, collection, query, getDocs, where, FieldPath, Firestore, documentId, getDoc, onSnapshot, addDoc } from "firebase/firestore";
 import { db } from "./firebase-config"
 const postsRef = collection(db, "posts");
 const usersRef = collection(db, "users");
+
+/*const createPost = async (userID, text) => {
+    const currentDate = dayjs().toJSON();
+    const user = await findUser(userID);
+    try {
+        const docRef = await addDoc((postsRef), {
+            displayName: "hey",
+            username: "het",
+            favorites: [],
+            reposts: [],
+            replies: [],
+            text: text,
+            date: currentDate,
+            userID
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}*/
 
 const deletePost = async (postID) => {
     await deleteDoc(doc(postsRef, postID))

@@ -48,7 +48,7 @@ export default function BottomNav() {
                     }}
                     label="Notifications" 
                     icon={
-                        <Badge badgeContent={5} max={99} color="primary">
+                        <Badge  max={99} color="primary">
                             <Notifications sx={{ color: 'white' }} />
                         </Badge>
                     } 

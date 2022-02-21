@@ -4,10 +4,11 @@ import { Avatar, Box, Button, Container, FormControl, IconButton, Input, Snackba
 import CloseIcon from '@mui/icons-material/Close';
 import Link from 'next/link'
 import { db } from '../../src/firebase-config'
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, updateDoc, arrayUnion, collection } from 'firebase/firestore'
 import dayjs from 'dayjs';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../src/firebase-config';
+import { findUser } from '../../src/functions';
 
 function ComposePost() {
 
@@ -34,6 +35,8 @@ function ComposePost() {
     setSnackbarOpen(true);
     return;
   }
+
+  //Creates post from postText state and sets date
   async function createPost(e) {
     const currentDate = dayjs().toJSON();
     e.preventDefault();
@@ -47,7 +50,7 @@ function ComposePost() {
             text: postText,
             date: currentDate,
             userID: user.uid
-        }) 
+        });
         setPostText('');
         handleSnackbarOpen(true);
     } catch (error) {
