@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Divider, Fab, Paper, Stack } from '@mui/material'
+import { Box, Divider, Fab, Paper, Stack, Typography } from '@mui/material'
 import FeedPost from './FeedPost'
 import { Create } from '@mui/icons-material'
 import Link from 'next/link'
@@ -21,19 +21,25 @@ function Feed() {
       <Stack
           divider={<Divider flexItem />}
           >
-          {posts.map((post) => {
-            return (
-              <FeedPost 
-                key={post.id} 
-                id={post.id} 
-                userId={post.data().userId}
-                username={post.data().username}
-                text={post.data().text}
-                avatar={post.data().avatar}
-                timestamp={post.data().timestamp}
-              />
-            )
-          })}
+          {posts.length > 0 ?
+            posts.map((post) => {
+              return (
+                <FeedPost 
+                  key={post.id} 
+                  id={post.id} 
+                  userId={post.data().userId}
+                  username={post.data().username}
+                  text={post.data().text}
+                  avatar={post.data().avatar}
+                  timestamp={post.data().timestamp}
+                />
+              )
+            })
+          :
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center', mt: '32px'}}>
+              <Typography variant="postH2">Nothing to see here...</Typography>
+            </Box>
+          }
       </Stack>
     }
     <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
