@@ -1,44 +1,42 @@
-import { Box, Divider, Fab, Paper, Stack, Typography } from '@mui/material'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { Box, Divider, Fab, Paper, Stack } from '@mui/material'
 import FeedPost from './FeedPost'
 import { Create } from '@mui/icons-material'
-import { db } from '../firebase-config'
-import { collection, onSnapshot, query } from 'firebase/firestore'
-//import { posts } from '../../data';
 import Link from 'next/link'
-import { getFeedPosts } from '../functions'
+import { db } from '../firebase-config'
+import { collection, onSnapshot, query, orderBy } from '@firebase/firestore'
 
 function Feed() {
   const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    const q = query(collection(db, "posts"))
-    onSnapshot(q, (querySnapshot) => {
-      setPosts(querySnapshot.docs.map((doc) => ({
-              id: doc.id,
-              userID: doc.data().userID,
-              displayName: doc.data().displayName,
-              username: doc.data().username,
-              text: doc.data().text,
-              favorites: doc.data().favorites,
-              reposts: doc.data().reposts,
-              replies: doc.data().replies,
-              date: doc.data().date
-      })))
-    })
-  }, []);
 
+  useEffect(
+    () => 
+      onSnapshot(query(collection(db, 'posts'), orderBy('timestamp', 'desc')), snapshot => {
+        setPosts(snapshot.docs);
+      })
+  , [db]);
   return (
   <Paper sx={{ minHeight: 'calc(100vh - 56px)', backgroundColor: 'background.paper' }} square>
     {posts &&
       <Stack
           divider={<Divider flexItem />}
           >
-          {posts.map(post => {
-            return <FeedPost key={post.id} post={post} />
+          {posts.map((post) => {
+            return (
+              <FeedPost 
+                key={post.id} 
+                id={post.id} 
+                userId={post.data().userId}
+                username={post.data().username}
+                text={post.data().text}
+                avatar={post.data().avatar}
+                timestamp={post.data().timestamp}
+              />
+            )
           })}
       </Stack>
     }
-    <Box sx={{ position: 'absolute', bottom: '76px', right: '20px', zIndex: 999 }}>
+    <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
       <Link href='/compose/post' passHref>
         <Fab color='primary' aria-label='create' sx={{ boxShadow: '0 0 5px white'}}>
           <Create  fontSize='large' />

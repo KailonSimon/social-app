@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import { ArrowBack } from '@mui/icons-material'
 import { Avatar, Box, Button, Container, FormControl, IconButton, Input, Snackbar, Alert } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
-import Link from 'next/link'
-import { db } from '../../src/firebase-config'
-import { addDoc, updateDoc, arrayUnion, collection } from 'firebase/firestore'
+import { db, storage } from '../../src/firebase-config'
+import { useSession } from 'next-auth/react';
+import { serverTimestamp } from 'firebase/firestore';
+import { ref } from 'firebase/storage';
+import { useRouter } from 'next/router';
+import { addDoc, collection } from 'firebase/firestore';
 import dayjs from 'dayjs';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../src/firebase-config';
-import { findUser } from '../../src/functions';
 
 function ComposePost() {
-
+  const { data: session } = useSession();
   const [postText, setPostText] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('Posted successfully!');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-  const [user, loading, error] = useAuthState(auth);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSnackbarClose = (e, reason) => {
     if (reason === 'clickaway') {
@@ -36,38 +36,37 @@ function ComposePost() {
     return;
   }
 
-  //Creates post from postText state and sets date
-  async function createPost(e) {
-    const currentDate = dayjs().toJSON();
-    e.preventDefault();
+  const createPost = async () => {
+    if (loading) return;
+
+    setLoading(true);
     try {
-        const docRef = await addDoc(collection(db, "posts"), {
-            displayName: user.displayName.split(' ')[0],
-            username: user.displayName.split(' ').join(''),
-            favorites: [],
-            reposts: [],
-            replies: [],
+        const docRef = await addDoc(collection(db, 'posts'), {
+            username: session.user.username,
+            avatar: session.user.image,
             text: postText,
-            date: currentDate,
-            userID: user.uid
+            userId: session.user.uid,
+            timestamp: dayjs().toJSON()
         });
         setPostText('');
         handleSnackbarOpen(true);
     } catch (error) {
         console.error(error);
-        handleSnackbarOpen(false)
+        handleSnackbarOpen(false);
+    } finally {
+        setLoading(false);
     }
-  };
+
+    //const imageRef = ref(storage, `posts/${docRef.id}/image`)
+  }
   return (
     <>
     <Container disableGutters>
         <Box sx={{ display: 'flex', alignItems: 'center', height: '53px', px: '16px', backgroundColor: 'background.paper' }}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                <Link href='/' passHref>
-                    <IconButton size="small">
-                        <ArrowBack fontSize='small'/>
-                    </IconButton>
-                </Link>
+                <IconButton size="small" onClick={() => router.push('/')}>
+                    <ArrowBack fontSize='small'/>
+                </IconButton>
                 <Button variant='contained' sx={{ minWidth: '32px', borderRadius: '999px', px: '16px', textTransform: 'none'}} disabled={postText ? false : true} onClick={createPost}>Post</Button>
             </Box>
         </Box>

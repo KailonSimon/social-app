@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Paper, BottomNavigation, BottomNavigationAction, Badge } from '@mui/material';
 import { Home, Mail, Notifications, Search } from '@mui/icons-material';
-import { NextLinkComposed } from './Link';
+import Link from 'next/link';
 
 export default function BottomNav() {
     const [value, setValue] = useState(0);
@@ -17,7 +17,7 @@ export default function BottomNav() {
                 sx={{ borderTop: '1px solid #424242' }}
             >
                 <BottomNavigationAction 
-                    component={NextLinkComposed} 
+                    component={Link} 
                     to={{
                         pathname: '/',
                         query: { name: 'test' },
@@ -31,7 +31,7 @@ export default function BottomNav() {
                     showLabel={false} 
                 />
                 <BottomNavigationAction 
-                    component={NextLinkComposed} 
+                    component={Link} 
                     to={{
                         pathname: '/search',
                         query: { name: 'test' },
@@ -39,9 +39,10 @@ export default function BottomNav() {
                     label="Search" 
                     icon={<Search sx={{ color: 'white' }} />} 
                     showLabel={false} 
+                    passHref
                 />
                 <BottomNavigationAction 
-                    component={NextLinkComposed} 
+                    component={Link}
                     to={{
                         pathname: '/notifications',
                         query: { name: 'test' },
@@ -53,16 +54,20 @@ export default function BottomNav() {
                         </Badge>
                     } 
                     showLabel={false} 
+                    passHref
+
                 />
                 <BottomNavigationAction 
-                    component={NextLinkComposed} 
+                    component={Link} 
                     to={{
                         pathname: '/messages',
                         query: { name: 'test' },
                     }}
                     label="Messages" 
                     icon={<Mail sx={{ color: 'white' }} />} 
-                    showLabel={false} 
+                    showLabel={false}
+                    passHref
+
                 />
             </BottomNavigation>
         </Paper>

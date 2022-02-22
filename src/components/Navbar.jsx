@@ -6,18 +6,16 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider, ListItemIcon, ListItemText } from '@mui/material';
 import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
 import Link from 'next/link';
-import { auth } from '../firebase-config';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useSession } from 'next-auth/react';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [user, loading, error] = useAuthState(auth);
+  const { data: session } = useSession();
   const toggleDrawer = (event) => {
     if (
       event &&
@@ -48,11 +46,11 @@ const Navbar = () => {
               </IconButton>
             </Box>
             <Box sx={{ pt: '12px' }}>
-              <Avatar src={user.photoURL} />
+              <Avatar alt="k" src={session?.user?.image} />
             </Box>
             <Box sx={{ py: '12px' }}>
-              <Typography variant='body1' color="text.primary" fontWeight='bold'>{user.displayName}</Typography>
-              <Typography variant='body1' color="text.secondary">{`@${user.email}`}</Typography>
+              <Typography variant='body1' color="text.primary" fontWeight='bold'>{session?.user?.name}</Typography>
+              <Typography variant='body1' color="text.secondary">@{session?.user?.username}</Typography>
             </Box>
             <Box sx={{ display: 'flex', width: '100%', columnGap: '24px', py: '12px'}}>
               <Box sx={{ display: 'flex', columnGap: '4px'}}>
@@ -119,12 +117,12 @@ const Navbar = () => {
               component="div"
               sx={{ mr: 2, display: { xs: 'none', md: 'flex' } }}
             >
-              LOGO
+              Home
             </Typography>
 
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={toggleDrawer} sx={{ p: 0, mr: '24px' }}>
-                <Avatar alt={user.displayName} src={user.photoURL} sx={{ width: '32px', height: '32px' }}/>
+                <Avatar alt="k" src={session?.user?.image} sx={{ width: '32px', height: '32px' }}/>
               </IconButton>
             </Box>
             <Typography
@@ -133,7 +131,7 @@ const Navbar = () => {
               component="div"
               sx={{ flexGrow: 0, fontWeight: 'bold', display: { xs: 'flex', md: 'none' } }}
             >
-              Home
+              Latest Posts
             </Typography>
 
           </Toolbar>

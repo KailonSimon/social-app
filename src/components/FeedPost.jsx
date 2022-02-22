@@ -7,12 +7,12 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { Block, ChatBubbleOutline, DeleteForeverOutlined, Favorite, FavoriteBorder, FlagOutlined, Loop, MoreHoriz, PersonRemoveOutlined, SentimentDissatisfiedOutlined, ShareOutlined, VolumeOffOutlined } from '@mui/icons-material';
-import { Box } from '@mui/system';
-import { Button, Dialog, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, SwipeableDrawer } from '@mui/material';
-import { auth } from '../firebase-config';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { deletePost, isPostFavorited, handleFavorite, isPostReposted, handleRepost } from '../functions';
+import { Box, Button, Dialog, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, SwipeableDrawer } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
+import { onSnapshot, collection, doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 const relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime)
@@ -40,31 +40,67 @@ dayjs.updateLocale('en', {
 
 export default function FeedPost(props) {
 
-  const { id, userID, displayName, username, text, favorites, reposts, replies, date } = props.post;
-  const [user, loading, error] = useAuthState(auth);
-  const [isFavorited, setIsFavorited] = useState(undefined);
-  const [isReposted, setIsReposted] = useState(undefined);
+  const { id, username, avatar, text, userId, timestamp } = props;
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [favorites, setFavorites] = useState([]);
+  const [hasFavorited, setHasFavorited] = useState(false);
+  const [reposts, setReposts] = useState([]);
+  const [hasReposted, setHasReposted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const loading = false;
+
+  useEffect(
+    () => 
+      onSnapshot(collection(db, "posts", id, "favorites"), (snapshot) => 
+        setFavorites(snapshot.docs)
+      ),
+    [db, id]
+  );
+
+  useEffect(
+    () => 
+      onSnapshot(collection(db, "posts", id, "reposts"), (snapshot) => 
+        setReposts(snapshot.docs)
+      ),
+    [db, id]
+  );
 
   useEffect(() => {
-    isPostFavorited(id, user.uid).then(r => {
-      setIsFavorited(r);
-    });
-    isPostReposted(id, user.uid).then(r => {
-      setIsReposted(r);
-    })
-  }, [])
+    setHasFavorited(favorites.findIndex((favorite) => (favorite.id === session?.user?.uid)) !== -1);
+  }, [favorites])
 
-  const handleFavoriteClick = () => {
-    handleFavorite(id, user.uid);
-    setIsFavorited(!isFavorited);
+  useEffect(() => {
+    setHasReposted(reposts.findIndex((repost) => (repost.id === session?.user?.uid)) !== -1);
+  }, [reposts])
+
+  const favoritePost = async () => {
+    if (hasFavorited) {
+      await deleteDoc(doc(db, "posts", id, "favorites", session.user.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "favorites", session.user.uid), {
+        username: session.user.username
+      });
+    }
   }
-  const handleRepostClick = () => {
-    handleRepost(id, user.uid);
-    setIsReposted(!isReposted);
+  const repostPost = async () => {
+    if (hasReposted) {
+      await deleteDoc(doc(db, "posts", id, "reposts", session.user.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "reposts", session.user.uid), {
+        username: session.user.username
+      });
+    }
   }
-  const timeElapsed = dayjs(date).fromNow();
+
+  const deletePost = async () => {
+    await deleteDoc(doc(db, "posts", id));
+};
+
+  const handleUserClick = () => {
+    router.push({ pathname: '/user/[uid]', query: { uid: id }});
+  }
   return (
     <>
     <Card sx={{ width: '100%', px: '16px', py: '12px' }} square elevation={0}>
@@ -76,9 +112,7 @@ export default function FeedPost(props) {
               <Avatar sx={{ width: '48px', height: '48px' }} />
             </Skeleton>
           :
-            <Avatar sx={{ width: '48px', height: '48px' }} >
-              {displayName[0]}
-            </Avatar>
+            <Avatar alt={`@${username}`} src={avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />
         }
         action={
           <IconButton aria-label="settings" sx={{ mt: '-8px' }} onClick={() => setIsMenuOpen(true)}>
@@ -86,11 +120,11 @@ export default function FeedPost(props) {
           </IconButton>
         }
         title={
-          <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px' }}>
-            <Typography variant="postH1" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={75}/> : displayName}</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px', cursor: 'pointer'}} onClick={handleUserClick}>
+            <Typography variant="postH1" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={75}/> : username}</Typography>
             <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
             <Typography variant="postH2" component="span">{!loading && '·'}</Typography>
-            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis', overflowWrap: 'break-word' }}>{timeElapsed}</Typography>
+            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis', overflowWrap: 'break-word' }}>{dayjs(timestamp).fromNow()}</Typography>
           </Box>
         }
       />
@@ -108,7 +142,7 @@ export default function FeedPost(props) {
                 <ChatBubbleOutline fontSize='small' color="disabled" />
               </IconButton>
               <Typography variant='postH2' sx={{ px: '8px'}}>
-                {replies}
+                {'0'}
               </Typography>
             </>
           }
@@ -117,10 +151,10 @@ export default function FeedPost(props) {
           {loading ? 
             <Skeleton width={25} height={20} /> :
             <>
-              <IconButton onClick={handleRepostClick} aria-label="repost" sx={{ p: 0 }}>
-                <Loop fontSize='small' color={ isReposted ? 'primary' : 'disabled' }/>
+              <IconButton onClick={repostPost} aria-label="repost" sx={{ p: 0 }}>
+                <Loop fontSize='small' color={ hasReposted ? 'primary' : 'disabled' }/>
               </IconButton>
-              <Typography variant='postH2' sx={{ px: '8px'}}>{reposts.length}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{reposts.length > 0 && reposts.length}</Typography>
             </>
           }
         </Box>
@@ -128,14 +162,14 @@ export default function FeedPost(props) {
           {loading ? 
             <Skeleton width={25} height={20} /> :
             <>
-              <IconButton onClick={handleFavoriteClick} aria-label="add-to-favorites" sx={{ p: 0 }}>
-                {isFavorited ?
+              <IconButton onClick={favoritePost} aria-label="add-to-favorites" sx={{ p: 0 }}>
+                {hasFavorited ?
                   <Favorite fontSize='small' color='primary'/>
                 :
                   <FavoriteBorder fontSize='small' color='disabled'/>
                 }
               </IconButton>
-              <Typography variant='postH2' sx={{ px: '8px'}}>{favorites.length}</Typography>
+              <Typography variant='postH2' sx={{ px: '8px'}}>{favorites.length > 0 && favorites.length}</Typography>
             </>
           }
         </Box>
@@ -153,7 +187,7 @@ export default function FeedPost(props) {
         BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
-          {userID == user.uid &&
+          {session?.user?.uid == userId &&
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => deletePost(id)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
@@ -163,7 +197,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           }
-          {userID != user.uid &&
+          {session?.user?.uid != userId &&
           <>
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
@@ -234,3 +268,4 @@ export default function FeedPost(props) {
     </>
   );
 }
+
