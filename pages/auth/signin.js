@@ -1,6 +1,5 @@
 import { getProviders, signIn as SignInWithProviders } from "next-auth/react"
 import { Container, Box, Typography, Button } from "@mui/material";
-import Login from "../../src/components/Login";
 
 //Client side
 function signIn({ providers }) {

@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { ArrowBack } from '@mui/icons-material'
 import { Avatar, Box, Button, Container, FormControl, IconButton, Input, Snackbar, Alert } from '@mui/material'
-import { db, storage } from '../../src/firebase-config'
+import { db } from '../../src/firebase-config'
 import { useSession } from 'next-auth/react';
-import { serverTimestamp } from 'firebase/firestore';
-import { ref } from 'firebase/storage';
 import { useRouter } from 'next/router';
 import { addDoc, collection } from 'firebase/firestore';
 import dayjs from 'dayjs';
