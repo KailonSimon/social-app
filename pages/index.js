@@ -3,10 +3,12 @@ import Head from 'next/head'
 import Feed from '../src/components/Feed'
 import Navbar from '../src/components/Navbar'
 import { CircularProgress, Container } from '@mui/material'
+import { useRouter } from "next/router"
 
 
 export default function Home() {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   if (status === "loading") {
     return (
@@ -14,6 +16,9 @@ export default function Home() {
         <CircularProgress />
       </Container>
     )
+  }
+  if (status === "unauthenticated") {
+    router.push('/auth/signin');
   }
 
   return (
