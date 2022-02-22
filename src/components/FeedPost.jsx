@@ -56,7 +56,7 @@ export default function FeedPost(props) {
       onSnapshot(collection(db, "posts", id, "favorites"), (snapshot) => 
         setFavorites(snapshot.docs)
       ),
-    [db, id]
+    [id]
   );
 
   useEffect(
@@ -64,16 +64,16 @@ export default function FeedPost(props) {
       onSnapshot(collection(db, "posts", id, "reposts"), (snapshot) => 
         setReposts(snapshot.docs)
       ),
-    [db, id]
+    [id]
   );
 
   useEffect(() => {
     setHasFavorited(favorites.findIndex((favorite) => (favorite.id === session?.user?.uid)) !== -1);
-  }, [favorites])
+  }, [session?.user?.uid, favorites])
 
   useEffect(() => {
     setHasReposted(reposts.findIndex((repost) => (repost.id === session?.user?.uid)) !== -1);
-  }, [reposts])
+  }, [session?.user?.uid, reposts])
 
   const favoritePost = async () => {
     if (hasFavorited) {

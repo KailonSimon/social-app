@@ -14,7 +14,7 @@ function Feed() {
       onSnapshot(query(collection(db, 'posts'), orderBy('timestamp', 'desc')), snapshot => {
         setPosts(snapshot.docs);
       })
-  , [db]);
+  , []);
   return (
   <Paper sx={{ minHeight: 'calc(100vh - 56px)', backgroundColor: 'background.paper' }} square>
     {posts &&

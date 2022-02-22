@@ -1,10 +1,8 @@
 import { Box, Button, Container, Modal, Typography } from "@mui/material";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { firebaseLogout } from "../src/firebase-config";
 import { signOut } from "next-auth/react";
 
-export default function logout() {
+export default function Logout() {
   const router = useRouter();
 
   return (
