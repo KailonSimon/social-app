@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import {GoogleAuthProvider, getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
-import {getFirestore, query, getDocs, collection, where, setDoc, doc } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import {getAuth } from "firebase/auth";
+import {getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,44 +15,13 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app = !getApps.length ? initializeApp(firebaseConfig) : getApp();
 const db = getFirestore(app);
-
-//Google sign in
-const googleProvider = new GoogleAuthProvider();
-const signInWithGoogle = async () => {
-  try {
-    const res = await signInWithPopup(auth, googleProvider);
-    const user = res.user;
-    const q = query(collection(db, "users"), where("uid", "==", user.uid));
-    const docs = await getDocs(q);
-    if (docs.docs.length === 0) {
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-        avatar: user.photoURL,
-        posts: [],
-        favorites: [],
-        followers: [],
-        following: []
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
-};
-
-const firebaseLogout = () => {
-  signOut(auth);
-};
+const auth = getAuth(app);
+const storage = getStorage(app);
 
 export {
   auth,
   db, 
-  signInWithGoogle,
-  firebaseLogout
+  storage
 };
