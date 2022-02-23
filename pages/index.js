@@ -7,14 +7,8 @@ import { useRouter } from "next/router"
 
 
 export default function Home() {
-<<<<<<< HEAD
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-=======
   const { data: session, status } = useSession()
   const router = useRouter();
->>>>>>> experimental
   if (status === "loading") {
     return (
       <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'background.paper', height: '100vh'}} disableGutters>
@@ -23,11 +17,7 @@ export default function Home() {
     )
   }
   if (status === "unauthenticated") {
-<<<<<<< HEAD
-    router.push('/auth/signin');
-=======
     router.push('/auth/signin')
->>>>>>> experimental
   }
 
   return (
