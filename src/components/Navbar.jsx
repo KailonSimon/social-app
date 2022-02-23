@@ -46,7 +46,7 @@ const Navbar = () => {
               </IconButton>
             </Box>
             <Box sx={{ pt: '12px' }}>
-              <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ border: '1px solid #fff' }} />
+              <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} />
             </Box>
             <Box sx={{ py: '12px' }}>
               <Typography variant='body1' color="text.primary" fontWeight='bold'>{session?.user?.name}</Typography>
@@ -122,7 +122,7 @@ const Navbar = () => {
 
             <Box sx={{ flexGrow: 0 }}>
               <IconButton onClick={toggleDrawer} sx={{ p: 0, mr: '24px' }}>
-                <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ width: '32px', height: '32px', border: '1px solid #fff' }}/>
+                <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ width: '32px', height: '32px' }}/>
               </IconButton>
             </Box>
             <Typography

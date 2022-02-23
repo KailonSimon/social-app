@@ -2,23 +2,50 @@ import { useSession } from "next-auth/react"
 import Head from 'next/head'
 import Feed from '../src/components/Feed'
 import Navbar from '../src/components/Navbar'
-import { Button, CircularProgress, Container, Typography, Box } from '@mui/material'
+import { Button, Container, Typography, Box } from '@mui/material'
 import { useRouter } from "next/router"
 import { getProviders, signIn as SignInWithProviders } from "next-auth/react"
 import { Google } from "@mui/icons-material";
+import { useEffect } from "react"
+import { onSnapshot, doc, setDoc } from "firebase/firestore"
+import { db } from "../src/firebase-config"
+import Loading from "../src/components/Loading"
 
 
 export default function Home({ providers }) {
   const { data: session, status } = useSession()
   const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      console.log('Signed in as:', session.user.name)
+      const unsubscribe = onSnapshot(doc(db, 'users', session.user.uid), (snapshot) => {
+        if (snapshot.data()) {
+          console.log('User found:', snapshot.data())
+        } else {
+          console.log('User not found')
+          saveUser(session);
+        }
+      })
+      return () => unsubscribe();
+    }
+  }, [session])
+
+  const saveUser = async (session) => {
+    await setDoc(doc(db, 'users', session.user.uid), {
+      username: session.user.username,
+      name: session.user.name,
+      avatar: session.user.image,
+      email: session.user.email
+    })
+  }
+      
   if (status === "loading") {
     return (
-      <Container sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: 'background.paper', height: '100vh'}} disableGutters>
-        <CircularProgress />
-      </Container>
+      <Loading />
     )
   }
-  if (status === "unauthenticated") {
+  else if (status === "unauthenticated") {
     return (
       <Container disableGutters sx={{ height: '100vh', backgroundColor: 'background.paper', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box sx={{ p: '15px' }}>
@@ -37,19 +64,19 @@ export default function Home({ providers }) {
       </Container>
     )
   }
-
-  return (
-    <>
-      <Head>
-        <title>Home</title>
-      </Head>
-      <Container sx={{ backgroundColor: 'background.paper'}} disableGutters>
-        <Navbar />
-        <Feed />
-      </Container>
-    </>
-      
-  )
+  else if (status === "authenticated") {
+    return (
+      <>
+        <Head>
+          <title>Home</title>
+        </Head>
+        <Container sx={{ backgroundColor: 'background.paper'}} disableGutters>
+          <Navbar />
+          <Feed />
+        </Container>
+      </>
+    )
+  }
 }
 export async function getServerSideProps() {
   const providers = await getProviders();

@@ -99,7 +99,7 @@ export default function FeedPost(props) {
 };
 
   const handleUserClick = () => {
-    router.push({ pathname: '/user/[uid]', query: { uid: id }});
+    router.push({ pathname: '/user/[uid]', query: { uid: userId }});
   }
   return (
     <>
