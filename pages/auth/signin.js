@@ -1,5 +1,6 @@
 import { getProviders, signIn as SignInWithProviders } from "next-auth/react"
 import { Container, Box, Typography, Button } from "@mui/material";
+import { Google } from "@mui/icons-material";
 
 //Client side
 function signIn({ providers }) {
@@ -11,7 +12,7 @@ function signIn({ providers }) {
                 <Typography component='span' fontWeight='bold' color='text.primary' variant='h6' sx={{ mb: '19px', letterSpacing: '-0.8px', fontSize: '22px'}}>Join today.</Typography>
                 {Object.values(providers).map((provider) => (
                 <div key={provider.name}>
-                    <Button onClick={() => SignInWithProviders(provider.id, { callbackUrl: '/' })} variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'white', color: 'black', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold'}} fullWidth>
+                    <Button onClick={() => SignInWithProviders(provider.id, { callbackUrl: '/' })} variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'white', color: 'black', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold', '&:hover': { backgroundColor: '#fff'} }} endIcon={<Google />} fullWidth>
                     Sign in with {provider.name}
                     </Button>
                 </div>
