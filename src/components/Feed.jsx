@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Divider, Fab, Paper, Stack, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, Fab, Paper, Skeleton, Stack, Typography } from '@mui/material'
 import FeedPost from './FeedPost'
 import { Create } from '@mui/icons-material'
 import Link from 'next/link'
@@ -36,8 +36,8 @@ function Feed() {
               )
             })
           :
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center', mt: '32px'}}>
-              <Typography variant="postH2">Nothing to see here...</Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', alignContent: 'center', mt: '32px'}}>
+              <CircularProgress color='primary' />
             </Box>
           }
       </Stack>

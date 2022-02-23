@@ -109,7 +109,7 @@ export default function FeedPost(props) {
         avatar={
           loading ? 
             <Skeleton variant="circular">
-              <Avatar sx={{ width: '48px', height: '48px' }} />
+              <Avatar sx={{ width: '48px', height: '48px', border: '2px solid #ed1c24'}} />
             </Skeleton>
           :
             <Avatar alt={username[0].toUpperCase()} src={avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />

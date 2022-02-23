@@ -60,17 +60,17 @@ function ComposePost() {
   return (
     <>
     <Container disableGutters>
-        <Box sx={{ display: 'flex', alignItems: 'center', height: '53px', px: '16px', backgroundColor: 'background.paper' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', height: '56px', px: '16px', backgroundColor: 'background.paper' }}>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                <IconButton size="small" onClick={() => router.push('/')}>
-                    <ArrowBack fontSize='small'/>
+                <IconButton onClick={() => router.push('/')}>
+                    <ArrowBack />
                 </IconButton>
                 <Button variant='contained' sx={{ minWidth: '32px', borderRadius: '999px', px: '16px', textTransform: 'none'}} disabled={postText ? false : true} onClick={createPost}>Post</Button>
             </Box>
         </Box>
         <Container sx={{ display: 'flex', height: 'calc(100vh - 53px)', backgroundColor: 'background.paper', pt: '4px' }}>
             <Box sx={{ mr: '12px', pt: '4px',  }}>
-                <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ height: '48px', width: '48px'}} />
+                <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ height: '48px', width: '48px', border: '1px solid #fff'}} />
             </Box>
             <FormControl variant="standard" sx={{ pt: '12px',  }}>
                 <Input placeholder="What's happening?" minRows={4} maxRows={4} multiline sx={{ fontSize: '20px' }} value={postText} onChange={e => setPostText(e.target.value)}/>
