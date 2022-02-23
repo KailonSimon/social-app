@@ -42,9 +42,9 @@ function Feed() {
           }
       </Stack>
     }
-    <Box sx={{ position: 'fixed', bottom: '76px', right: '20px', zIndex: 999 }}>
+    <Box sx={{ position: 'fixed', bottom: '16px', right: '16px', zIndex: 999 }}>
       <Link href='/compose/post' passHref>
-        <Fab color='primary' aria-label='create' sx={{ boxShadow: '0 0 5px white'}}>
+        <Fab color='primary' aria-label='create'>
           <Create  fontSize='large' />
         </Fab>
       </Link>

@@ -112,7 +112,7 @@ export default function FeedPost(props) {
               <Avatar sx={{ width: '48px', height: '48px' }} />
             </Skeleton>
           :
-            <Avatar alt={`@${username}`} src={avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />
+            <Avatar alt={username[0].toUpperCase()} src={avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />
         }
         action={
           <IconButton aria-label="settings" sx={{ mt: '-8px' }} onClick={() => setIsMenuOpen(true)}>

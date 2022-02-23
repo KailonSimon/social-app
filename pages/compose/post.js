@@ -70,7 +70,7 @@ function ComposePost() {
         </Box>
         <Container sx={{ display: 'flex', height: 'calc(100vh - 53px)', backgroundColor: 'background.paper', pt: '4px' }}>
             <Box sx={{ mr: '12px', pt: '4px',  }}>
-                <Avatar sx={{ height: '48px', width: '48px'}} />
+                <Avatar alt={session?.user?.username.toUpperCase()} src={session?.user?.image} sx={{ height: '48px', width: '48px'}} />
             </Box>
             <FormControl variant="standard" sx={{ pt: '12px',  }}>
                 <Input placeholder="What's happening?" minRows={4} maxRows={4} multiline sx={{ fontSize: '20px' }} value={postText} onChange={e => setPostText(e.target.value)}/>
