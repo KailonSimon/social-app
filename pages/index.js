@@ -10,6 +10,7 @@ import { useEffect } from "react"
 import { onSnapshot, doc, setDoc } from "firebase/firestore"
 import { db } from "../src/firebase-config"
 import Loading from "../src/components/Loading"
+import dayjs from "dayjs"
 
 
 export default function Home({ providers }) {
@@ -32,7 +33,14 @@ export default function Home({ providers }) {
       username: session.user.username,
       name: session.user.name,
       avatar: session.user.image,
-      email: session.user.email
+      email: session.user.email,
+      bio: '',
+      following: [],
+      followers: [],
+      joined: dayjs().toJSON(),
+      birthday: '',
+      link: '',
+      location: ''
     })
   }
       
