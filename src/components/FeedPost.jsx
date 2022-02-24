@@ -84,6 +84,11 @@ export default function FeedPost(props) {
     setHasReposted(reposts.findIndex((repost) => (repost.id === session?.user?.uid)) !== -1);
   }, [session?.user?.uid, reposts])
 
+  useEffect(() => {
+    console.log('Post author:', userId)
+    console.log('Session uid:', session.user.uid)
+  }, [])
+
   const favoritePost = async () => {
     if (hasFavorited) {
       await deleteDoc(doc(db, "posts", id, "favorites", session.user.uid));
@@ -196,7 +201,7 @@ export default function FeedPost(props) {
         BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
-          {session?.user?.uid == postAuthor?.userId &&
+          {session?.user?.uid == userId &&
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => deletePost(id)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
@@ -206,7 +211,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           }
-          {session?.user?.uid != postAuthor?.userId &&
+          {session?.user?.uid != userId &&
           <>
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
