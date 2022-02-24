@@ -10,12 +10,14 @@ import { SwipeableDrawer, List, ListSubheader, ListItem, ListItemButton, Divider
 import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@mui/icons-material';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
   const toggleDrawer = (event) => {
     if (
       event &&
@@ -67,7 +69,7 @@ const Navbar = () => {
       >
 
         <ListItem sx={{ p: 0 }}>
-          <ListItemButton sx={{ minHeight: '52px' }}>
+          <ListItemButton onClick={() => router.push(`/user/${session.user.uid}`)} sx={{ minHeight: '52px' }}>
             <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
               <PermIdentity fontSize='small' />
             </ListItemIcon>

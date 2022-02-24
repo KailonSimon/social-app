@@ -142,7 +142,7 @@ export default function FeedPost(props) {
                 <ChatBubbleOutline fontSize='small' color="disabled" />
               </IconButton>
               <Typography variant='postH2' sx={{ px: '8px'}}>
-                {'0'}
+                {''}
               </Typography>
             </>
           }

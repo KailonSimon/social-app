@@ -59,7 +59,7 @@ function Profile() {
       )
       return () => unsubscribe();
     }
-  }, [session])
+  }, [session, uid])
 
   const handleFollowClick = () => {
     setFollowing(!following);
@@ -113,7 +113,7 @@ function Profile() {
                 <Avatar src={user?.avatar} alt={user?.name[0].toUpperCase()} sx={{ height: '85px', width: '85px', position: 'relative', bottom: '0px', border: '1px solid black' }} />
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', gap: '8px' }}>
                   {session.user.uid == uid ? 
-                    <Button onClick={() => console.log('Edit profile clicked')} variant='outlined' sx={{ px: '16px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'white', backgroundColor: 'black', '&:hover': { backgroundColor: 'black', border: '1px solid #536471' } }}>
+                    <Button onClick={() => console.log('Edit profile clicked')} variant='outlined' sx={{ px: '16px', mb: '12px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'white', backgroundColor: 'black', '&:hover': { backgroundColor: 'black', border: '1px solid #536471' } }}>
                       <Typography variant='postH1' component='span'>Edit profile</Typography>
                     </Button>
                   :

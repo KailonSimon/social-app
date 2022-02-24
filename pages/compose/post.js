@@ -40,8 +40,6 @@ function ComposePost() {
     setLoading(true);
     try {
         const docRef = await addDoc(collection(db, 'posts'), {
-            username: session.user.username,
-            avatar: session.user.image,
             text: postText,
             userId: session.user.uid,
             timestamp: dayjs().toJSON()
