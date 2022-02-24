@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,12 +11,15 @@ import { Close, FavoriteBorder, Logout, PermIdentity, SettingsOutlined } from '@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from '../firebase-config'
 
 const pages = ['Products', 'Pricing', 'Blog'];
 
 const Navbar = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const { data: session } = useSession();
+  const [sessionUser, setSessionUser] = useState(null);
   const router = useRouter();
   const toggleDrawer = (event) => {
     if (
@@ -29,7 +32,14 @@ const Navbar = () => {
 
     setIsDrawerOpen(!isDrawerOpen);
   };
-
+  useEffect(() => {
+    if (session) {
+      const unsubscribe = onSnapshot(doc(db, 'users', session.user.uid), (doc) => {
+        setSessionUser(doc.data())
+      })
+      return () => unsubscribe();
+    }
+  }, [session])
 
   const drawer = (
     <Box
@@ -56,11 +66,11 @@ const Navbar = () => {
             </Box>
             <Box sx={{ display: 'flex', width: '100%', columnGap: '24px', py: '12px'}}>
               <Box sx={{ display: 'flex', columnGap: '4px'}}>
-                <Typography variant='body1' color="text.primary" fontWeight='bold'>0</Typography>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>{sessionUser?.following.length}</Typography>
                 <Typography variant='body1' color="text.secondary">Following</Typography>
               </Box>
               <Box sx={{ display: 'flex', columnGap: '4px' }}>
-                <Typography variant='body1' color="text.primary" fontWeight='bold'>0</Typography>
+                <Typography variant='body1' color="text.primary" fontWeight='bold'>{sessionUser?.followers.length}</Typography>
                 <Typography variant='body1' color="text.secondary">Followers</Typography>
               </Box>
             </Box>

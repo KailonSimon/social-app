@@ -9,6 +9,7 @@ import { arrayRemove, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/fi
 import { db } from "../../src/firebase-config";
 import Loading from "../../src/components/Loading";
 import NotSignedIn from "../../src/components/NotSignedIn";
+import dayjs from "dayjs"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,11 +47,6 @@ function Profile() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { uid } = router.query;
-  //conditional info
-  const location = 'Texas';
-  const birthday = 'February 5';
-  const joinDate = 'February 2022';
-  const link = 'google.com';
 
   useEffect(() => {
     if (session) {
@@ -89,7 +85,6 @@ function Profile() {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
 
   if (status === "loading") {
     return (
@@ -199,7 +194,7 @@ function Profile() {
             </Box>
             <Box sx={{ mb: '12px', mt: '4px' }}>
                 {/*conditional info*/}
-                {location &&
+                {user?.location &&
                 <Box sx={{ display: 'inline-block', mr: '12px' }}>
                     <LocationOnOutlined sx={{ color: 'neutral.main', mr: '4px', fontSize: 18, verticalAlign: 'bottom' }} />
                     <Typography
@@ -207,11 +202,11 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        {location}
+                        {user?.location}
                     </Typography>
                 </Box>
                 }
-                {link &&
+                {user?.link &&
                 <Box sx={{ display: 'inline-block', mr: '12px' }}>
                     <LinkOutlined sx={{ color: 'neutral.main', mr: '4px', fontSize: 18, verticalAlign: 'bottom' }} />
                     <Typography
@@ -219,11 +214,11 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        {link}
+                        {user?.link}
                     </Typography>
                 </Box>
                 }
-                {birthday &&
+                {user?.birthday &&
                 <Box sx={{ display: 'inline-block', mr: '12px', verticalAlign: 'bottom'}}>
                     <CakeOutlined sx={{ color: 'neutral.main', mr: '4px', fontSize: 18 }} />
                     <Typography
@@ -231,11 +226,11 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        Born {birthday}
+                        Born {user?.birthday}
                     </Typography>
                 </Box>
                 }
-                {joinDate &&
+                {user?.joined &&
                 <Box sx={{ display: 'inline-block', mr: '12px' }}>
                     <CelebrationOutlined  sx={{ color: 'neutral.main', mr: '4px', fontSize: 18, verticalAlign: 'bottom' }} />
                     <Typography
@@ -243,7 +238,7 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        Joined {joinDate}
+                        Joined {dayjs(user?.joined).format('MMMM YYYY')}
                     </Typography>
                 </Box>
                 }
