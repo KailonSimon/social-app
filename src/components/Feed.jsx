@@ -28,9 +28,7 @@ function Feed() {
                   key={post.id} 
                   id={post.id} 
                   userId={post.data().userId}
-                  username={post.data().username}
                   text={post.data().text}
-                  avatar={post.data().avatar}
                   timestamp={post.data().timestamp}
                 />
               )

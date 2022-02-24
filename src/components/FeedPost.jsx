@@ -40,7 +40,7 @@ dayjs.updateLocale('en', {
 
 export default function FeedPost(props) {
 
-  const { id, username, avatar, text, userId, timestamp } = props;
+  const { id, text, userId, timestamp } = props;
   const { data: session } = useSession();
   const router = useRouter();
   const [favorites, setFavorites] = useState([]);
@@ -49,6 +49,7 @@ export default function FeedPost(props) {
   const [hasReposted, setHasReposted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [postAuthor, setPostAuthor] = useState(null);
   const loading = false;
 
   useEffect(
@@ -65,6 +66,14 @@ export default function FeedPost(props) {
         setReposts(snapshot.docs)
       ),
     [id]
+  );
+
+  useEffect(
+    () => 
+      onSnapshot(doc(db, 'users', userId), (doc) => 
+        setPostAuthor(doc.data())
+      ),
+    [userId]
   );
 
   useEffect(() => {
@@ -112,7 +121,7 @@ export default function FeedPost(props) {
               <Avatar sx={{ width: '48px', height: '48px', border: '2px solid #ed1c24'}} />
             </Skeleton>
           :
-            <Avatar alt={username[0].toUpperCase()} src={avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />
+            <Avatar alt={postAuthor?.username[0].toUpperCase()} src={postAuthor?.avatar} sx={{ width: '48px', height: '48px', cursor: 'pointer' }} onClick={handleUserClick} />
         }
         action={
           <IconButton aria-label="settings" sx={{ mt: '-8px' }} onClick={() => setIsMenuOpen(true)}>
@@ -121,8 +130,8 @@ export default function FeedPost(props) {
         }
         title={
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', columnGap: '4px', cursor: 'pointer'}} onClick={handleUserClick}>
-            <Typography variant="postH1" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={75}/> : username}</Typography>
-            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={100}/> : `@${username}`}</Typography>
+            <Typography variant="postH1" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={75}/> : postAuthor?.name}</Typography>
+            <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis' }}>{loading ? <Skeleton width={100}/> : `@${postAuthor?.username}`}</Typography>
             <Typography variant="postH2" component="span">{!loading && '·'}</Typography>
             <Typography variant="postH2" component="span" sx={{ textOverflow: 'ellipsis', overflowWrap: 'break-word' }}>{dayjs(timestamp).fromNow()}</Typography>
           </Box>
@@ -187,7 +196,7 @@ export default function FeedPost(props) {
         BackdropProps={{ style: { backgroundColor: 'rgba(91, 112, 131, 0.4)' }}}
       >
         <Box sx={{ backgroundColor: 'black' }}>
-          {session?.user?.uid == userId &&
+          {session?.user?.uid == postAuthor?.userId &&
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => deletePost(id)} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
@@ -197,7 +206,7 @@ export default function FeedPost(props) {
             </ListItemButton>
           </ListItem>
           }
-          {session?.user?.uid != userId &&
+          {session?.user?.uid != postAuthor?.userId &&
           <>
           <ListItem sx={{ p: 0 }} >
             <ListItemButton onClick={() => setIsMenuOpen(false)} sx={{ minHeight: '52px' }}>
@@ -212,7 +221,7 @@ export default function FeedPost(props) {
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <PersonRemoveOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
-              <ListItemText primary={`Unfollow @${username}`} />
+              <ListItemText primary={`Unfollow @${postAuthor?.username}`} />
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
@@ -220,7 +229,7 @@ export default function FeedPost(props) {
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <VolumeOffOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
-              <ListItemText primary={`Mute @${username}`} />
+              <ListItemText primary={`Mute @${postAuthor?.username}`} />
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
@@ -228,7 +237,7 @@ export default function FeedPost(props) {
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <Block fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>
-              <ListItemText primary={`Block @${username}`} />
+              <ListItemText primary={`Block @${postAuthor?.username}`} />
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
@@ -257,8 +266,8 @@ export default function FeedPost(props) {
         PaperProps={{ style: { borderRadius: '16px' }}}
       >
         <Box sx={{ width: '320px', maxWidth: '80vw', p: '28px', backgroundColor: 'background.paper', display: 'flex', flexDirection: 'column'}}>
-            <Typography variant='h6' color='text.primary' fontWeight='bold'>Block @{username}?</Typography>
-            <Typography variant='body1' color='text.secondary'>They will not be able to follow you or view your posts, and you will not see posts or notifications from @{username}.</Typography>
+            <Typography variant='h6' color='text.primary' fontWeight='bold'>Block @{postAuthor?.username}?</Typography>
+            <Typography variant='body1' color='text.secondary'>They will not be able to follow you or view your posts, and you will not see posts or notifications from @{postAuthor?.username}.</Typography>
             <Box sx={{ mt: '24px' }}>
                 <Button onClick={() => setIsDialogOpen(false)} variant='contained' sx={{ minHeight: '44px', mb: '12px', backgroundColor: 'red', color: 'white', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold'}} fullWidth>Block</Button>
                 <Button onClick={() => setIsDialogOpen(false)} variant='outlined' sx={{ minHeight: '44px', textTransform: 'none', borderRadius: '999px', fontWeight: 'bold', color: 'white', border: '1px solid #536471'}} fullWidth>Cancel</Button>
