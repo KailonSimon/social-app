@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Feed from "../../src/components/Feed";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { doc, onSnapshot } from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../src/firebase-config";
 import Loading from "../../src/components/Loading";
 import NotSignedIn from "../../src/components/NotSignedIn";
@@ -48,7 +48,7 @@ function Profile() {
   const { uid } = router.query;
   //conditional info
   const location = 'Texas';
-  const birthday = 'September 7';
+  const birthday = 'February 5';
   const joinDate = 'February 2022';
   const link = 'google.com';
 
@@ -61,9 +61,31 @@ function Profile() {
     }
   }, [session, uid])
 
-  const handleFollowClick = () => {
-    setFollowing(!following);
+  useEffect(() => {
+    if (user) {
+      setFollowing(user.followers.findIndex((user) => (user === session?.user?.uid)) !== -1);
+      setFollowsUser(user.following.findIndex((user) => (user === session?.user?.uid)) !== -1);
+    }
+  }, [user, uid])
+
+  const followUser = async () => {
+    if (following) {
+      await updateDoc(doc(db, 'users', session.user.uid), {
+        following: arrayRemove(uid)
+      })
+      await updateDoc(doc(db, 'users', uid), {
+        followers: arrayRemove(session.user.uid)
+      })
+    } else {
+      await updateDoc(doc(db, 'users', session.user.uid), {
+        following: arrayUnion(uid)
+      })
+      await updateDoc(doc(db, 'users', uid), {
+        followers: arrayUnion(session.user.uid)
+      })
+    }
   }
+
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -130,11 +152,11 @@ function Profile() {
                       </IconButton>
                     }
                     {following ?
-                      <Button onClick={handleFollowClick} variant='outlined' sx={{ px: '16px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'white', backgroundColor: 'black', '&:hover': { backgroundColor: 'black', border: '1px solid #536471' } }}>
+                      <Button onClick={followUser} variant='outlined' sx={{ px: '16px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'white', backgroundColor: 'black', '&:hover': { backgroundColor: 'black', border: '1px solid #536471' } }}>
                         <Typography variant='postH1' component='span'>Following</Typography>
                       </Button>
                       :
-                      <Button onClick={handleFollowClick} variant='outlined' sx={{ px: '16px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'black', backgroundColor: 'white', '&:hover': { backgroundColor: 'white', border: '1px solid #536471' } }}>
+                      <Button onClick={followUser} variant='outlined' sx={{ px: '16px', height: '36px', textTransform: 'none', borderRadius: '999px', border: '1px solid #536471', fontWeight: 'bold', color: 'black', backgroundColor: 'white', '&:hover': { backgroundColor: 'white', border: '1px solid #536471' } }}>
                           <Typography variant='postH1' component='span'>Follow</Typography>
                       </Button>
                     }
@@ -172,7 +194,7 @@ function Profile() {
                     component="div"
                     sx={{ flexGrow: 0, fontWeight: '400', display: 'flex', color: 'white' }}
                     >
-                    Bio
+                    {user?.bio}
                 </Typography>
             </Box>
             <Box sx={{ mb: '12px', mt: '4px' }}>
@@ -209,7 +231,7 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        {birthday}
+                        Born {birthday}
                     </Typography>
                 </Box>
                 }
@@ -221,10 +243,20 @@ function Profile() {
                         noWrap
                         sx={{ color: 'neutral.main' }}
                         >
-                        {joinDate}
+                        Joined {joinDate}
                     </Typography>
                 </Box>
                 }
+            </Box>
+            <Box sx={{ display: 'flex', width: '100%', columnGap: '24px'}}>
+              <Box sx={{ display: 'flex', columnGap: '4px'}}>
+                <Typography variant='postH1' color="text.primary" fontWeight='bold'>{user?.following.length}</Typography>
+                <Typography variant='postH2' sx={{ color: 'neutral.main' }}>Following</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', columnGap: '4px' }}>
+                <Typography variant='postH1' color="text.primary" fontWeight='bold'>{user?.followers.length}</Typography>
+                <Typography variant='postH2' sx={{ color: 'neutral.main' }}>Followers</Typography>
+              </Box>
             </Box>
         </Box>
         <Box>
@@ -284,7 +316,7 @@ function Profile() {
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ p: 0 }}>
-            <ListItemButton onClick={() => {setIsMenuOpen(false); setFollowing(!following)}} sx={{ minHeight: '52px' }}>
+            <ListItemButton onClick={() => { followUser(); setIsMenuOpen(false) }} sx={{ minHeight: '52px' }}>
               <ListItemIcon sx={{ minWidth: 0, mr: '12px' }}>
                 <PersonRemoveOutlined fontSize='small' sx={{ color: 'neutral.main' }} />
               </ListItemIcon>

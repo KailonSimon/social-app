@@ -18,12 +18,8 @@ export default function Home({ providers }) {
 
   useEffect(() => {
     if (session) {
-      console.log('Signed in as:', session.user.name)
       const unsubscribe = onSnapshot(doc(db, 'users', session.user.uid), (snapshot) => {
-        if (snapshot.data()) {
-          console.log('User found:', snapshot.data())
-        } else {
-          console.log('User not found')
+        if (!snapshot.data()) {
           saveUser(session);
         }
       })
